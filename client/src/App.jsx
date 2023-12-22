@@ -1,7 +1,7 @@
-import './App.css'
+import './App.scss'
 import Dashboard from './Components/Dasboard/Dashboard'
 import Login from './Components/Login/Login'
-import Register from './Components/Register/Register'
+import Register from './Components/Register/register'
 
 // Enable Routing!
 import {

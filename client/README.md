@@ -19,6 +19,10 @@ client and server
 - is the frontend
 - installations
     - npm install react-router-dom
+    - npm install -D sass
+    - npm install react-icons
+- How to run
+    - npm run dev
     
 
 # server
