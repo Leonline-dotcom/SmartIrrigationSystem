@@ -96,3 +96,23 @@ img, video{
     color: var(--primaryColor);
     background-color:var(--paleGreen);
 }
+
+//Styling for Pages
+
+.loginPage{
+    height: 100vh;
+    width: 100%;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 7px 50px rgb(214, 223, 213) ;
+
+    .container{
+        height: 75vh;
+        width: 60%;
+        margin: auto;
+        justify-content: space-between;
+        border-radius: 10px;
+        background: hsl(0,0%,91%);
+    }
+}

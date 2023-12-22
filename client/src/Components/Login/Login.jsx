@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 //import icon
 import { FaUserShield } from "react-icons/fa";
 import { BsShieldLockFill } from "react-icons/bs";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 // Import Assets
 import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
@@ -57,6 +58,16 @@ const Login = () => {
               <input type="password" id='password' placeholder='Enter Password' />
             </div>
           </div>
+          
+          <button type='submit' className='btn flex'>
+            <span>Login</span>
+            <FaLongArrowAltRight className='icon' />
+          </button>
+
+          <span className="forgotPassword">
+            Forgot your password? <a href="">Click Here</a>
+          </span>
+
         </form>
       </div>    
 
