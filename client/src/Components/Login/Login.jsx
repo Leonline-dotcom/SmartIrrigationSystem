@@ -3,7 +3,14 @@ import './Login.css'
 
 const Login = () => {
   return (
-    <div>Login</div>
+    <div>
+      {/* <button>Register</button>
+      <button>Sign In</button> */}
+
+Not a User?<a href='/register'>Register!</a>
+<br/>
+To Dash<a href='/dashboard'>Dash</a>
+    </div>
   )
 }
 

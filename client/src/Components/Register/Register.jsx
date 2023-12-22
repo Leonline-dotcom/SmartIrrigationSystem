@@ -2,7 +2,10 @@ import React from 'react'
 
 const Register = () => {
   return (
-    <div>Register</div>
+    <div>
+      This is the Register page
+      Already a User?<a href='/login'>Login</a>
+    </div>
   )
 }
 
