@@ -1,5 +1,6 @@
 import React from 'react'
 import './Login.css'
+import '../../App.css'
 import { Link } from 'react-router-dom'
 
 //import icon
@@ -17,6 +18,7 @@ const Login = () => {
     <div className='loginPage flex'>
     <div className="container flex">
 
+       {/* Below is the code for the Video and the register button  */}
       <div className="videoDiv">
         <video src={video} type="video/mp4" autoPlay muted loop></video>
         
@@ -33,7 +35,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
-
+      {/* Here is the code for the form */}
       <div className="formDiv flex">
         <div className="headerDiv">
           <img src={logo} alt="sexy cool logo"/>
