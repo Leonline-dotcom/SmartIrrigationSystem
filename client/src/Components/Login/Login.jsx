@@ -43,7 +43,7 @@ const Login = () => {
         </div>
 
         <form action="" className='form grid'>
-          <span>Login Status goes here</span>
+          <span className='showMessage'>Login Status goes here</span>
 
           <div className="inputDiv">
             <label htmlFor="username">Username</label>
