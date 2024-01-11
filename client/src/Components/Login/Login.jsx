@@ -13,7 +13,25 @@ import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
 
-const Login = () => {
+export default function Login() {
+  const [userData, setUserData] = React.useState(
+      {username: "", password: ""}
+  )
+  function handleChange(event){
+    setUserData(prevUserData => {
+      return {
+        ...prevUserData,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
+  function handleSubmit(event){
+    event.preventDefault()
+    console.log(userData)
+    // API data submission goes here
+  }
+
   return (
     <div className='loginPage flex'>
     <div className="container flex">
@@ -42,14 +60,20 @@ const Login = () => {
           <h3>Welcome Back!</h3>
         </div>
 
-        <form action="" className='form grid'>
+        <form action="" className='form grid' onSubmit={handleSubmit}>
           <span className='showMessage'>Login Status goes here</span>
 
           <div className="inputDiv">
             <label htmlFor="username">Username</label>
             <div className="input flex">
               <FaUserShield className ='icon'/>
-              <input type="text" id='username' placeholder='Enter Username' />
+              <input type="text"
+                     id='username'
+                     placeholder='Enter Username'
+                     onChange={handleChange}
+                     name="username"
+                     value={userData.username}
+              />
             </div>
           </div>
 
@@ -57,11 +81,17 @@ const Login = () => {
             <label htmlFor="password">Password</label>
             <div className="input flex">
               <BsShieldLockFill className ='icon'/>
-              <input type="password" id='password' placeholder='Enter Password' />
+              <input type="password"
+                     id='password'
+                     placeholder='Enter Password'
+                     onChange={handleChange}
+                     name="password"
+                     value={userData.password}
+              />
             </div>
           </div>
           
-          <button type='submit' className='btn flex'>
+          <button className='btn flex'>
             <span>Login</span>
             <FaLongArrowAltRight className='icon' />
           </button>
@@ -77,5 +107,3 @@ const Login = () => {
     </div>
   )
 }
-
-export default Login
