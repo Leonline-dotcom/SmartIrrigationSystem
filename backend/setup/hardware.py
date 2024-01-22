@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
-# Testing Hardware deploy 1
+# Testing Hardware deploy 
 connection_status = {"connected": False}
 
 @app.route('/api/esp-status', methods=['POST'])
@@ -10,7 +12,8 @@ def update_esp_status():
     global connection_status
     data = request.json
     print("Received data:", data)
-    connection_status = data  # Stores the received status
+    connection_status_name = data  # Stores the received status
+    # ^Changed the name for testing
     return jsonify({"message": "Data received successfully"}), 200
 
 @app.route('/api/esp-status', methods=['GET'])
