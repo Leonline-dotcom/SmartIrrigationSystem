@@ -56,8 +56,9 @@ export default function Login() {
       {/* Here is the code for the form */}
       <div className="formDiv flex">
         <div className="headerDiv">
-          <img src={logo} alt="sexy cool logo"/>
-          <h3>Welcome Back!</h3>
+          <img src={logo} alt="sexy cool logo"/> 
+          {/* TODO We probably want to change "sexy cool logo" */}
+          <h3>HODWDY Welcome Back!</h3>
         </div>
 
         <form action="" className='form grid' onSubmit={handleSubmit}>
