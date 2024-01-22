@@ -58,7 +58,7 @@ export default function Login() {
         <div className="headerDiv">
           <img src={logo} alt="sexy cool logo"/> 
           {/* TODO We probably want to change "sexy cool logo" */}
-          <h3>Welcome Back!</h3>
+          <h3>Welcome Back yall!</h3>
         </div>
 
         <form action="" className='form grid' onSubmit={handleSubmit}>
