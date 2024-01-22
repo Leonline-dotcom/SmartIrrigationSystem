@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Testing for changes
+# Testing Hardware deploy 1
 connection_status = {"connected": False}
 
 @app.route('/api/esp-status', methods=['POST'])
