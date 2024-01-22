@@ -15,10 +15,12 @@ function App(){
     const checkConnection = async () => {
       try {
         // Replace URL with your ESP32 or backend endpoint
-        const response = await fetch('http://oasis-flow.com/connection_status');
+        // const response = await fetch('http://oasis-flow.com/connection_status');
+        const response = await fetch('http://oasis-flow.com/api/esp-status');
         const data = await response.json();
         setIsConnected(data.connected);
       } catch (error) {
+        console.error('Error fetching connection status:', error);
         setIsConnected(false);
       }
     };

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+# Testing for changes
 connection_status = {"connected": False}
 
 @app.route('/api/esp-status', methods=['POST'])
