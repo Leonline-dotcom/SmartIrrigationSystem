@@ -12,12 +12,14 @@ def update_esp_status():
     global connection_status
     data = request.json
     print("Received data:", data)
-    connection_status = data  # Stores the received status
+    # connection_status = data  # Stores the received status
+    connection_status["connected"] = data.get('status') == 'connected'
     return jsonify({"message": "Data received successfully"}), 200
 
 @app.route('/api/esp-status', methods=['GET'])
 def get_esp_status():
-    return jsonify(connection_status), 200
+    # return jsonify(connection_status), 200
+     return jsonify({"connected": connection_status["connected"]}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
