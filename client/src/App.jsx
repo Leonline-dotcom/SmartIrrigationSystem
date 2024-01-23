@@ -9,19 +9,21 @@ import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Testing changes
 function App(){
-  const [isConnected, setIsConnected] = useState(false);
+  const [connectionInfo, setConnectionInfo] = useState({
+    connected: false,
+    ssid: '',
+    password: ''
+  });
 
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Replace URL with your ESP32 or backend endpoint
-        // const response = await fetch('http://oasis-flow.com/connection_status');
         const response = await fetch('http://oasis-flow.com/api/esp-status');
         const data = await response.json();
-        setIsConnected(data.connected);
+        setConnectionInfo(data);
       } catch (error) {
         console.error('Error fetching connection status:', error);
-        setIsConnected(false);
+        setConnectionInfo({ connected: false, ssid: '', password: '' });
       }
     };
 
@@ -44,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     path:'/setup',
-    element: <div><Setup/></div>
+    element: <Setup connectionInfo={connectionInfo} />
   }
 ]);
 
