@@ -21,10 +21,11 @@ function App(){
       try {
         const response = await fetch('http://oasis-flow.com/api/esp-status');
         const data = await response.json();
+        console.log('Received data:', data);
         setConnectionInfo(data);
       } catch (error) {
         console.error('Error fetching connection status:', error);
-        setConnectionInfo({ connected: false, ssid: '', password: '' });
+        setConnectionInfo({ connected: false, ssid: 'Error', password: 'Error' });
       }
     };
 
