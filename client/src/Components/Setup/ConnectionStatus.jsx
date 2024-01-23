@@ -13,7 +13,7 @@ function ConnectionStatus({ connectionInfo, onConnect }) {
         />
         <p>
           {connectionInfo.connected  
-            ? "Successfully connected to the ${connectionInfo.ssid} wifi network" 
+            ? 'Successfully connected to the ${connectionInfo.ssid} wifi network' 
             : "Go to the settings of your device and connect to the WiFi network Smart Irrigation System."}
         </p>
         <button onClick={onConnect} disabled={!connectionInfo.connected}>
