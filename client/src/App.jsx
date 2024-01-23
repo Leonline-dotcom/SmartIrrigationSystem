@@ -4,7 +4,6 @@ import Dashboard from './Components/Dasboard/Dashboard'
 import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Setup from './Components/Setup/ConnectionStatus'
-// Enable Routing!
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Testing changes
@@ -14,6 +13,8 @@ function App(){
     ssid: '',
     password: ''
   });
+
+  const pollInterval = 1000;
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -28,6 +29,10 @@ function App(){
     };
 
     checkConnection();
+
+    const intervalId = setInterval(checkConnection, pollInterval);
+
+    return () => clearInterval(intervalId);
   }, []);
 
 //create router
