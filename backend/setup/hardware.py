@@ -4,9 +4,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Testing Hardware deploy 
+# Apis for getting connection status of ESP32
 connection_status = {"connected": False}
+button_pressed = False
 
+
+# Change this to a PUT so it doesn't create so many entities
 @app.route('/api/esp-status', methods=['POST'])
 def update_esp_status():
     global connection_status    # 
@@ -23,6 +26,35 @@ def update_esp_status():
 def get_esp_status():
      return jsonify(connection_status), 200
 
+# https://assertible.com/blog/7-http-methods-every-web-developer-should-know-and-how-to-test-them
+
+# TODO Also create an example webpage to demonstrate these
+
+# TODO Create template for GET
+
+# TODO Create template for POST
+
+# TODO Create template for PUT
+
+# TODO Create template for PATCH
+
+# TODO Create template for DELETE
+
+# TODO Create template for HEAD
+
+#ESP32 control code:
+@app.route('/api/button-press', methods=['POST'])  # New endpoint for button press
+def button_press():
+    global button_pressed
+    button_pressed = True  # Update the state to indicate the button was pressed
+    return jsonify({"message": "Button press registered"}), 200
+
+@app.route('/api/button-status', methods=['GET'])  # New endpoint for React to check button status
+def get_button_status():
+    global button_pressed
+    status = button_pressed
+    button_pressed = False  # Reset after checking
+    return jsonify({"buttonPressed": status}), 200
 
 
 if __name__ == '__main__':

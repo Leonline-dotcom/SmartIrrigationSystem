@@ -4,6 +4,7 @@ import Dashboard from './Components/Dasboard/Dashboard'
 import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Setup from './Components/Setup/ConnectionStatus'
+import ESP32 from './Components/Examples/ESP32Example'
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Testing changes
@@ -53,6 +54,11 @@ const router = createBrowserRouter([
   {
     path:'/setup',
     element: <Setup connectionInfo={connectionInfo} />
+  },
+  {
+    path:'/esp32',
+    element: <ESP32/>
+
   }
 ]);
 
