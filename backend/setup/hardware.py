@@ -65,7 +65,7 @@ def set_led_control():
     led_state = data.get('state', 'off')
     return jsonify({"message": "LED state updated to " + led_state}), 200
 
-@app.route('/api/led-state', methods=['GET'])
+@app.route('/api/led-control', methods=['GET'])
 def get_led_control():
     return jsonify({"ledState": led_state}), 200
 
