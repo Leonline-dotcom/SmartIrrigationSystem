@@ -2,10 +2,18 @@ import React from 'react';
 
 function ControlPanel() {
   const toggleLED = async () => {
-    const response = await fetch('/api/controlLED', { method: 'POST' });
-    const data = await response.json();
-    console.log('LED State:', data.led_state);
+    try {
+      const response = await fetch('/api/led-control', { 
+        method: 'GET' // Or 'POST' if changing the state
+      });
+      const { ledState } = await response.json();
+      console.log('LED State:', ledState);
+      // Update component state or UI based on the response if needed
+    } catch (error) {
+      console.error('Error toggling LED:', error);
+    }
   };
+
 
   return (
     <div>
