@@ -7,6 +7,7 @@ CORS(app)
 # Apis for getting connection status of ESP32
 connection_status = {"connected": False}
 button_pressed = False
+led_state = "off"
 
 
 # Change this to a PUT so it doesn't create so many entities
@@ -56,6 +57,17 @@ def get_button_status():
     button_pressed = False  # Reset after checking
     return jsonify({"buttonPressed": status}), 200
 
+@app.route('/api/led-control', methods=['POST'])
+def set_led_control():
+    global led_state
+    data = request.json
+    # Update LED state based on the request data
+    led_state = data.get('state', 'off')
+    return jsonify({"message": "LED state updated to " + led_state}), 200
+
+@app.route('/api/led-state', methods=['GET'])
+def get_led_control():
+    return jsonify({"ledState": led_state}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function ControlPanel() {
-  const toggleLED = async () => {
-    try {
-      const response = await fetch('/api/led-control', { 
-        method: 'GET' // Or 'POST' if changing the state
-      });
-      const { ledState } = await response.json();
-      console.log('LED State:', ledState);
-      // Update component state or UI based on the response if needed
-    } catch (error) {
-      console.error('Error toggling LED:', error);
-    }
-  };
+  const [ledState, setLedState] = useState('off');
 
+  useEffect(() => {
+    // Fetch the current LED state from the Flask backend on component mount
+    const fetchLedState = async () => {
+      const response = await fetch('/api/led-state');
+      const data = await response.json();
+      setLedState(data.ledState);
+    };
+
+    fetchLedState();
+  }, []);
+
+  const toggleLED = async () => {
+    // Toggle the LED state
+    const newLedState = ledState === 'off' ? 'on' : 'off';
+
+    await fetch('/api/led-control', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: newLedState }),
+    });
+
+    setLedState(newLedState); // Update the LED state in the component
+  };
 
   return (
     <div>
-      <button onClick={toggleLED}>Toggle LED on ESP32</button>
+      <p>LED is currently {ledState}</p>
+      <button onClick={toggleLED}>Toggle LED</button>
     </div>
   );
 }
