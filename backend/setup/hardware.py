@@ -44,29 +44,29 @@ def get_esp_status():
 # TODO Create template for HEAD
 
 #ESP32 control code:
-@app.route('/api/button-press', methods=['POST'])  # New endpoint for button press
+@app.route('/api/button-press', methods=['POST'])
 def button_press():
     global button_pressed
-    button_pressed = True  # Update the state to indicate the button was pressed
+    button_pressed = True
     return jsonify({"message": "Button press registered"}), 200
 
-@app.route('/api/button-status', methods=['GET'])  # New endpoint for React to check button status
+@app.route('/api/button-status', methods=['GET'])
 def get_button_status():
     global button_pressed
-    status = button_pressed
-    button_pressed = False  # Reset after checking
-    return jsonify({"buttonPressed": status}), 200
+    was_pressed = button_pressed
+    button_pressed = False  # Reset the state
+    return jsonify({"buttonPressed": was_pressed}), 200
 
 @app.route('/api/led-control', methods=['POST'])
 def set_led_control():
     global led_state
     data = request.json
-    # Update LED state based on the request data
     led_state = data.get('state', 'off')
     return jsonify({"message": "LED state updated to " + led_state}), 200
 
-@app.route('/api/led-control', methods=['GET'])
-def get_led_control():
+@app.route('/api/led-state', methods=['GET'])
+def get_led_state():
+    global led_state
     return jsonify({"ledState": led_state}), 200
 
 if __name__ == '__main__':
