@@ -8,6 +8,7 @@ import {
     createBrowserRouter,
     RouterProvider
 } from 'react-router-dom'
+import React from "react";
 
 
 //create router
@@ -30,9 +31,24 @@ const router = createBrowserRouter([
 
 
 function App() {
+  /*const [userData, setUserData] = useState(
+      {username: "", password: "", email: ""}
+  )*/
+
+  /*useEffect(() => {
+    fetch("/signUp").then(
+        res => res.json()
+    ).then(
+        data => {
+          setUserData(data)
+          console.log(data)
+        }
+    )
+  }, [])*/
+
   return (
     <div>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </div>
   )
 }
