@@ -3,8 +3,8 @@ from pymongo import MongoClient
 import certifi
 
 ca = certifi.where()
-dbURL = "mongodb+srv://AdrianGallegos:rEVwgkZbo9WFFHjo@cluster0.fymg6ls.mongodb.net/?retryWrites=true&w=majority"
-
+#dbURL = "mongodb+srv://AdrianGallegos:rEVwgkZbo9WFFHjo@cluster0.fymg6ls.mongodb.net/?retryWrites=true&w=majority"
+dbURL = "mongodb+srv://leon:36uWjhORYtUi9Oif@cluster0.uaokiyz.mongodb.net/?retryWrites=true&w=majority"
 
 def addNewUser(username, password):
     with MongoClient(dbURL, tlsCAFile=ca) as org:
