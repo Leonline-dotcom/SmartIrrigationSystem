@@ -13,19 +13,41 @@ import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
 
-export default function Login() {
-  const [userData, setUserData] = useState(
-      {username: "", password: "", found: false}
-  )
+function Login() {
+  // const [userData, setUserData] = useState(
+  //     {username: "", password: "", found: false}
+  // )
+  async function login(event){
+    event.preventDefault();
+    let username_val = document.getElementById("username").value;
+    let password_val = document.getElementById("password").value;
 
-  function handleChange(event) {
-    setUserData(prevUserData => {
-      return {
-        ...prevUserData,
-        [event.target.name]: event.target.value
-      }
-    })
+    const login_data = {username: username_val, password: password_val};
+    const fetch_options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(login_data)
+    };
+    const response = await fetch('http://localhost:5001/login', fetch_options);
+    const response_body = await response.json();
+    console.log(response_body)
+    if(response.status !== 200){ 
+      alert("Invalid login");
+      return;
+    };
+
+    //Then navigate to the users individual page 
   }
+
+
+  // function handleChange(event) {
+  //   setUserData(prevUserData => {
+  //     return {
+  //       ...prevUserData,
+  //       [event.target.name]: event.target.value
+  //     }
+  //   })
+  // }
 
   /*useEffect(() => {
     fetch("http://localhost:5000/login", {
@@ -40,23 +62,23 @@ export default function Login() {
     )
   }, [])*/
 
-  function handleSubmit(event) {
-    event.preventDefault()
-    console.log(userData)
-    // API data submission goes here
-    fetch("http://localhost:5000/login", {
-    method: 'POST',
-      body: userData,
-    }).then(
-        res => res.json()
-    ).then(
-        data => {
-          //setUserData(data)
-          console.log(data)
-        }
-    )
+  // function handleSubmit(event) {
+  //   event.preventDefault()
+  //   console.log(userData)
+  //   // API data submission goes here
+  //   fetch("http://localhost:5000/login", {
+  //   method: 'POST',
+  //     body: userData,
+  //   }).then(
+  //       res => res.json()
+  //   ).then(
+  //       data => {
+  //         //setUserData(data)
+  //         console.log(data)
+  //       }
+  //   )
 
-  }
+  // }
 
     return (
         <div className='loginPage flex'>
@@ -86,7 +108,7 @@ export default function Login() {
                 <h3>Welcome Back!</h3>
               </div>
 
-              <form action="" className='form grid' onSubmit={handleSubmit}>
+              <form action="" className='form grid' onSubmit={login}>
                 <span className='showMessage'>Login Status goes here</span>
 
                 <div className="inputDiv">
@@ -96,9 +118,9 @@ export default function Login() {
                     <input type="text"
                            id='username'
                            placeholder='Enter Username'
-                           onChange={handleChange}
+                          //  onChange={handleChange}
                            name="username"
-                           value={userData.username}
+                          //  value={userData.username}
                     />
                   </div>
                 </div>
@@ -110,9 +132,9 @@ export default function Login() {
                     <input type="password"
                            id='password'
                            placeholder='Enter Password'
-                           onChange={handleChange}
+                          //  onChange={handleChange}
                            name="password"
-                           value={userData.password}
+                          //  value={userData.password}
                     />
                   </div>
                 </div>
@@ -133,3 +155,5 @@ export default function Login() {
         </div>
     )
   }
+
+  export default Login;

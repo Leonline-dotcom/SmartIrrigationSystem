@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+# CORS(app, resources={r"/*": {"origins": "http://localhost:5173", "methods": ["POST"]}})
+CORS(app)
 
 allUsers = {
     "username": "admin",
@@ -15,9 +16,11 @@ def hello():
 
 @app.route("/login", methods=['POST'])
 def signIn():
-    creds = request.form
+    creds = request.json
     username = creds.get('username')
     password = creds.get('password')
+    print("Username: ", username)
+    print("Password: ", password)
     return jsonify(username)
     # Validate the credentials (for demonstration purposes)
     # if username == allUsers['username'] and password == allUsers['password']:
@@ -25,5 +28,13 @@ def signIn():
     # else:
     #     return jsonify({"message": "Invalid credentials"}), 401
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# @app.route('/login', methods=['OPTIONS'])
+# def login_options():
+#     return '', 204
+
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
