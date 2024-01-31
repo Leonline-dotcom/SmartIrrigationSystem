@@ -48,21 +48,20 @@ def get_esp_status():
 def button_press():
     global button_pressed
     button_pressed = True
-    return jsonify({"message": "Button press registered"}), 200
+    return jsonify({"message": "Button press received"}), 200
 
 @app.route('/api/button-status', methods=['GET'])
 def get_button_status():
     global button_pressed
-    was_pressed = button_pressed
-    button_pressed = False  # Reset the state
-    return jsonify({"buttonPressed": was_pressed}), 200
+    status = button_pressed
+    button_pressed = False  # Reset after checking
+    return jsonify({"buttonPressed": status}), 200
 
 @app.route('/api/led-control', methods=['POST'])
 def set_led_control():
     global led_state
-    data = request.json
-    led_state = data.get('state', 'off')
-    return jsonify({"message": "LED state updated to " + led_state}), 200
+    led_state = request.json.get('state', 'off')
+    return jsonify({"message": f"LED state updated to {led_state}"}), 200
 
 @app.route('/api/led-state', methods=['GET'])
 def get_led_state():
