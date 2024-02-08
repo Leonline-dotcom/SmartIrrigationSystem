@@ -37,7 +37,7 @@ def signUp():
     print("Password: ", password)
     print("Email: ", email)
     # Validate the credentials (for demonstration purposes)
-    if db.addNewUser(username, password):
+    if db.addNewUser(username, password, email):
         return jsonify({"message": "New User Created"})
     # Can optionally later customize this to display message such as "Username already taken",
     # "Password doesn't include ______", "Email is already associated to an account"

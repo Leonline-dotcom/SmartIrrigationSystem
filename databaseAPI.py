@@ -6,7 +6,7 @@ ca = certifi.where()
 #dbURL = "mongodb+srv://AdrianGallegos:rEVwgkZbo9WFFHjo@cluster0.fymg6ls.mongodb.net/?retryWrites=true&w=majority"
 dbURL = "mongodb+srv://leon:36uWjhORYtUi9Oif@cluster0.uaokiyz.mongodb.net/?retryWrites=true&w=majority"
 
-def addNewUser(username, password):
+def addNewUser(username, password, email):
     with MongoClient(dbURL, tlsCAFile=ca) as org:
         usersDB = org["Users"]
         usersCols = usersDB.list_collection_names()
@@ -14,7 +14,46 @@ def addNewUser(username, password):
             return False
         else:
             newUser = usersDB[username]
-            insert = {"Username": username, "Password": password}
+            insert = {"Password": password,
+                      "Email": email,
+                      "Name": "",
+                      "Grid": {
+                          "Zone1": {
+                              "Schedule": "",
+                              "History": "",
+                              "Moisture Level": "",
+                              "Status": ""
+                          },
+                          "Zone2": {
+                              "Schedule": "",
+                              "History": "",
+                              "Moisture Level": "",
+                              "Status": ""
+                          },
+                          "Zone3": {
+                              "Schedule": "",
+                              "History": "",
+                              "Moisture Level": "",
+                              "Status": ""
+                          },
+                          "Zone4": {
+                              "Schedule": "",
+                              "History": "",
+                              "Moisture Level": "",
+                              "Status": ""
+                          },
+                          "Status": ""
+                      },
+                      "Device Settings": {
+                          "Wifi": {
+                              "Name": "",
+                              "Password": ""
+                          },
+                          "Location": "",
+                          "Connection Status": "",
+                          "Water Tank Status": ""
+                      }
+                      }
             newUser.insert_one(insert)
             return True
 
