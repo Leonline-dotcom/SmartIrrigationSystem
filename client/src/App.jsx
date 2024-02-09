@@ -17,11 +17,14 @@ function App(){
   });
 
   const pollInterval = 1000;
-
+  //TODO Austin needs to clear App.jsx and put it in its appropriate component.
   useEffect(() => {
+    let intervalId = null;
+
     const checkConnection = async () => {
       try {
-        const response = await fetch('http://oasis-flow.com/api/esp-status');
+        // const response = await fetch('http://oasis-flow.com/api/esp-status');
+        const response = await fetch('http://localhost:5001/api/esp-status');
         const data = await response.json();
         console.log('Received data:', data);
         setConnectionInfo(data);
@@ -32,8 +35,8 @@ function App(){
     };
 
     checkConnection();
-
-    const intervalId = setInterval(checkConnection, pollInterval);
+    
+    intervalId = setInterval(checkConnection, pollInterval);
 
     return () => clearInterval(intervalId);
   }, []);

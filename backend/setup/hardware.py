@@ -9,6 +9,8 @@ connection_status = {"connected": False}
 button_pressed = False
 led_state = "off"
 
+#https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
+#^^^ Explaining how to put our flasks in multiple files
 
 # Change this to a PUT so it doesn't create so many entities
 @app.route('/api/esp-status', methods=['POST'])
@@ -69,4 +71,5 @@ def get_led_state():
     return jsonify({"ledState": led_state}), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001) # Run in 5001 for localhost
+    # app.run(host='0.0.0.0', port=5000) # Run in 5000 for production on AWS
