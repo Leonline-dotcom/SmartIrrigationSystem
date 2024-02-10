@@ -6,7 +6,11 @@ import Register from './Components/Register/Register'
 import Setup from './Components/Setup/ConnectionStatus'
 import ESP32 from './Components/Examples/ESP32Example'
 import Template from './Components/Examples/Templates'
-import {createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Zones from './Components/Zones/ZoneList'
+import Zone from './Components/Zones/Zone'
+import RenderTime from './Components/Zones/Timer'
+import CountdownTimer from './Components/Zones/CountdownTimer';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 
 // Testing changes
 function App(){
@@ -45,7 +49,11 @@ function App(){
 const router = createBrowserRouter([
   {
     path:'/*',
-    element: <div><Login/></div>
+    // element: <div><Login/></div>
+    element: <div><Zones/></div>
+    // element: <div><RenderTime/></div>
+    // element: <div><CountdownTimer/></div>
+    // element: <div><PlaceHolder/></div>
   },
   {
     path:'/register',
@@ -66,6 +74,17 @@ const router = createBrowserRouter([
   {
     path:'/template',
     element: <Template/>
+  },
+  {
+    path: '/zones',
+    element: <Zones/>,
+  },
+  {
+    path: '/zones/:zoneId', element: <Zone/>
+  },
+  {
+    path: '/timer',
+    element: <RenderTime/>
   }
 ]);
 
