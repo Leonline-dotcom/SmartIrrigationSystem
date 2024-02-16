@@ -9,9 +9,12 @@ function Interface(){
         solenoid4: false,
       });
 
-    const toggleSolenoid = async (solenoid) => {
-        const newState = !solState[solenoid];
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+
+    const toggleSolenoid = async (solenoid) => {
+        setIsButtonDisabled(true);  // Disable button
+        const newState = !solState[solenoid];
         setSolState(prevState => ({
             ...prevState,
             [solenoid]: newState
@@ -43,6 +46,7 @@ function Interface(){
                 [solenoid]: !newState
             }));
         }
+        setIsButtonDisabled(false);  // Re-enable button after state update
     };
 
 
