@@ -1,0 +1,33 @@
+.zoneList-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates two columns */
+    gap: 30px; /* Adjust the gap as needed */
+    max-width: 800px;
+    margin: 0 auto; /* Center the grid */
+}
+
+.zone-item {
+    background-color: #f0f0f0; /* Example background color */
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2); /* Simple shadow for depth */
+}
+
+.zone-item a {
+    text-decoration: none;
+    color: #333; /* Dark text for visibility */
+    font-weight: bold;
+}
+
+.zone-item:hover {
+    background-color: #e8e8e8; /* Slightly darker on hover */
+    cursor: pointer; /* Change cursor to indicate clickability */
+}
+
+.zone-item img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
