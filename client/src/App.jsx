@@ -6,6 +6,9 @@ import Register from './Components/Register/Register'
 import Setup from './Components/Setup/ConnectionStatus'
 import ESP32 from './Components/Examples/ESP32Example'
 import Template from './Components/Examples/Templates'
+import Zones from './Components/Zones/ZoneList'
+import Zone from './Components/Zones/Zone'
+import Interface from './Components/Examples/Interface';
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Testing changes
@@ -18,28 +21,28 @@ function App(){
 
   const pollInterval = 1000;
   //TODO Austin needs to clear App.jsx and put it in its appropriate component.
-  useEffect(() => {
-    let intervalId = null;
+  // useEffect(() => {
+  //   let intervalId = null;
 
-    const checkConnection = async () => {
-      try {
-        // const response = await fetch('http://oasis-flow.com/api/esp-status');
-        const response = await fetch('http://localhost:5001/api/esp-status');
-        const data = await response.json();
-        console.log('Received data:', data);
-        setConnectionInfo(data);
-      } catch (error) {
-        console.error('Error fetching connection status:', error);
-        setConnectionInfo({ connected: false, ssid: 'Error', password: 'Error' });
-      }
-    };
+  //   const checkConnection = async () => {
+  //     try {
+  //       // const response = await fetch('http://oasis-flow.com/api/esp-status');
+  //       const response = await fetch('http://localhost:5001/api/esp-status');
+  //       const data = await response.json();
+  //       console.log('Received data:', data);
+  //       setConnectionInfo(data);
+  //     } catch (error) {
+  //       console.error('Error fetching connection status:', error);
+  //       setConnectionInfo({ connected: false, ssid: 'Error', password: 'Error' });
+  //     }
+  //   };
 
-    checkConnection();
+  //   // checkConnection();
     
-    intervalId = setInterval(checkConnection, pollInterval);
+  //   intervalId = setInterval(checkConnection, pollInterval);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
 //create router
 const router = createBrowserRouter([
@@ -66,6 +69,17 @@ const router = createBrowserRouter([
   {
     path:'/template',
     element: <Template/>
+  },
+  {
+    path: '/zones',
+    element: <Zones/>,
+  },
+  {
+    path: '/zones/:zoneId', element: <Zone/>
+  },
+  {
+    path: '/interface',
+    element: <Interface/>
   }
 ]);
 
