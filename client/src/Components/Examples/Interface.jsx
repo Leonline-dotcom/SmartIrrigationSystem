@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import './Interface.css';  // Assume you have a CSS file for styles
 
+//TODO change the .env to make it easier for test or real deployment
+
+
+//Comment out which one the test enviroment is not.
+// const API_URL = "http://10.154.79.185:5001";  //Local Host URL
+const API_URL = "http://oasis-flow.com";      //Website URL
+
 function Interface(){
     const [solState, setSolState] = useState({
         solenoid1: false,
@@ -13,42 +20,32 @@ function Interface(){
 
 
     const toggleSolenoid = async (solenoid) => {
-        setIsButtonDisabled(true);  // Disable button
-        const newState = !solState[solenoid];
-        setSolState(prevState => ({
-            ...prevState,
-            [solenoid]: newState
-        }));
+      const newState = !solState[solenoid];
+      const updatedStates = { ...solState, [solenoid]: newState };
 
-        try {
-            // http://10.147.74.162:5001/api/toggle-solenoid/${solenoid}
-            const response = await fetch(`http://oasis-flow.com/api/toggle-solenoid/${solenoid}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ newState }),
-            });
+      setSolState(updatedStates);
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+      try {
+          const response = await fetch(`${API_URL}/api/toggle-solenoids`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(updatedStates),
+          });
 
-            // Handle response data here if needed
-            const data = await response.json();
-            console.log(data);
-
-        } catch (error) {
-            console.error('Error toggling solenoid:', error);
-            // Optionally, revert the state if the API call fails
-            setSolState(prevState => ({
-                ...prevState,
-                [solenoid]: !newState
-            }));
-        }
-        setIsButtonDisabled(false);  // Re-enable button after state update
-    };
-
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          console.log(await response.json());
+      } catch (error) {
+          console.error('Error toggling solenoids:', error);
+          setSolState(prevState => ({
+              ...prevState,
+              [solenoid]: !newState
+          }));
+      }
+  };
 
     return (
         <div className="interface-grid">
