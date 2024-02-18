@@ -25,6 +25,8 @@ function Interface(){
 
       setSolState(updatedStates);
 
+      console.log(`Toggling ${solenoid}: ${newState}`);  // Log the solenoid being toggled and its new state
+      console.log("Updated States:", updatedStates);  // Log the updated states being sent to the backend
       try {
           const response = await fetch(`${API_URL}/api/toggle-solenoids`, {
               method: 'POST',
@@ -38,6 +40,7 @@ function Interface(){
               throw new Error('Network response was not ok');
           }
           console.log(await response.json());
+          console.log("Response from backend:", responseData);  // Log the response from the backend
       } catch (error) {
           console.error('Error toggling solenoids:', error);
           setSolState(prevState => ({

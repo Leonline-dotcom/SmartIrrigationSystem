@@ -35,13 +35,16 @@ def register_esp():
     data = request.json
     ESP32_IP = data['ip']
     print(f"ESP32 IP Address Updated: {ESP32_IP}")
+    print(ESP32_IP)
     return jsonify({"message": "ESP32 IP registered successfully"}), 200
 
 
 # ESP32_IP = '10.159.64.103'  # Replace with the ESP32's IP address from the arduino serial monitor
 @app.route('/api/toggle-solenoids', methods=['POST'])
 def toggle_solenoids():
+    print(f"ESP32_IP: {ESP32_IP}")  # Print the ESP32 IP address
     solenoid_states = request.json
+    print(f"Solenoid States Received: {solenoid_states}")  # Print the received solenoid states
     try:
         # Forward the request to the ESP32 server
         response = requests.post(f"http://{ESP32_IP}/api/toggle-solenoids", json=solenoid_states)
@@ -50,12 +53,13 @@ def toggle_solenoids():
         else:
             return jsonify({"error": "Failed to toggle solenoids", "details": response.text}), response.status_code
     except Exception as e:
+        print(f"Error connecting to ESP32: {str(e)}")  # Print any connection errors
         return jsonify({"error": "Failed to connect to ESP32", "details": str(e)}), 500
 
 
 if __name__ == '__main__':
-    hostname = socket.gethostname()
-    local_ip = socket.gethostbyname(hostname)
-    print(f"Flask server can be reached at: {local_ip}:5001")
+    # hostname = socket.gethostname()
+    # local_ip = socket.gethostbyname(hostname)
+    # print(f"Flask server can be reached at: {local_ip}:5001")
     app.run(host='0.0.0.0', port=5001) # Run in 5001 for localhost
     # app.run(host='0.0.0.0', port=5000) # Run in 5000 for production on AWS
