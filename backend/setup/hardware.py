@@ -18,7 +18,7 @@ solenoids = {
     "solenoid3": False,
     "solenoid4": False
 }
-
+#Error testing
 #TODO Write a indication the esp32 is connected to the internet
 
 
