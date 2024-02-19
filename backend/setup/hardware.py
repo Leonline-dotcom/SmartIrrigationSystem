@@ -30,12 +30,14 @@ def test_endpoint():
     return jsonify({"message": "Test endpoint hit successfully"}), 200
 
 
-ESP32_IP = None
+# ESP32_IP = None
 @app.route('/api/register-esp', methods=['POST'])
 def register_esp():
-    global ESP32_IP
+    # global ESP32_IP
     data = request.json
     ESP32_IP = data['ip']
+    with open("esp32_ip.txt", "w") as ip_file:
+        ip_file.write(ESP32_IP)
     print(f"ESP32 IP Address Updated: {ESP32_IP}")
     app.logger.info(f"ESP32 IP Address Updated: {ESP32_IP}")
     print(ESP32_IP)
@@ -45,8 +47,15 @@ def register_esp():
 # ESP32_IP = '10.159.64.103'  # Replace with the ESP32's IP address from the arduino serial monitor
 @app.route('/api/toggle-solenoids', methods=['POST'])
 def toggle_solenoids():
-    print(f"ESP32_IP: {ESP32_IP}")  # Print the ESP32 IP address
-    app.logger.info(f"ESP32 Address in toggle_solenoids: {ESP32_IP}")
+    # print(f"ESP32_IP: {ESP32_IP}")  # Print the ESP32 IP address
+    # app.logger.info(f"ESP32 Address in toggle_solenoids: {ESP32_IP}")
+    try:
+        with open("esp32_ip.txt", "r") as ip_file:
+            ESP32_IP = ip_file.read().strip()
+    except FileNotFoundError:
+        app.logger.error("ESP32 IP address file not found.")
+        return jsonify({"error": "ESP32 IP address not found"}), 500
+    
     solenoid_states = request.json
     print(f"Solenoid States Received: {solenoid_states}")  # Print the received solenoid states
     app.logger.info(f"Solenoid States Received: {solenoid_states}")
