@@ -8,6 +8,9 @@ from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 CORS(app)
 
+# To allow specific domains
+CORS(app, resources={r"/api/*": {"origins": "http://www.oasis-flow.com"}})
+
 #https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
 #^^^ Explaining how to put our flasks in multiple files
 
