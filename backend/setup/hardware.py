@@ -55,15 +55,22 @@ def toggle_solenoids():
     try:
         with open("esp32_ip.txt", "r") as ip_file:
             ESP32_IP = ip_file.read().strip()
+            if not ESP32_IP:
+                raise ValueError("ESP32 IP is empty.")
     except FileNotFoundError:
         app.logger.error("ESP32 IP address file not found.")
         return jsonify({"error": "ESP32 IP address not found"}), 500
+    except ValueError as e:
+        app.logger.error(str(e))
+        return jsonify({"error": str(e)}), 500
     
     solenoid_states = request.json
+    print("ESP32_IP:", ESP32_IP)
     print(f"Solenoid States Received: {solenoid_states}")  # Print the received solenoid states
     app.logger.info(f"Solenoid States Received: {solenoid_states}")
     try:
         # Forward the request to the ESP32 server
+        app.logger.info(f"http://{ESP32_IP}/api/toggle-solenoids")
         response = requests.post(f"http://{ESP32_IP}/api/toggle-solenoids", json=solenoid_states)
         # response = requests.post(f"http://10.2.242.249/api/toggle-solenoids", json=solenoid_states)
         if response.status_code == 200:
