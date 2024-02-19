@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import socket
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 CORS(app)
@@ -48,6 +50,7 @@ def toggle_solenoids():
     try:
         # Forward the request to the ESP32 server
         response = requests.post(f"http://{ESP32_IP}/api/toggle-solenoids", json=solenoid_states)
+        # response = requests.post(f"http://10.2.242.249/api/toggle-solenoids", json=solenoid_states)
         if response.status_code == 200:
             return jsonify({"message": "Solenoids toggled successfully"}), 200
         else:
@@ -57,9 +60,22 @@ def toggle_solenoids():
         return jsonify({"error": "Failed to connect to ESP32", "details": str(e)}), 500
 
 
+if not app.debug:
+    log_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+    
+    # Define the log file name and max size (here, 100 MB)
+    file_handler = RotatingFileHandler('flask_app.log', maxBytes=100 * 1024 * 1024, backupCount=10)
+    file_handler.setFormatter(log_formatter)
+    file_handler.setLevel(logging.INFO)
+    
+    # Add the handler to the Flask app's logger
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+
 if __name__ == '__main__':
     # hostname = socket.gethostname()
     # local_ip = socket.gethostbyname(hostname)
     # print(f"Flask server can be reached at: {local_ip}:5001")
     app.run(host='0.0.0.0', port=5001) # Run in 5001 for localhost
+    app.debug = True
     # app.run(host='0.0.0.0', port=5000) # Run in 5000 for production on AWS

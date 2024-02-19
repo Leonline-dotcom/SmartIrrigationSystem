@@ -5,7 +5,7 @@ import './Interface.css';  // Assume you have a CSS file for styles
 
 
 //Comment out which one the test enviroment is not.
-// const API_URL = "http://10.154.79.185:5001";  //Local Host URL
+// const API_URL = "http://10.148.156.214:5001";  //Local Host URL
 const API_URL = "http://oasis-flow.com";      //Website URL
 
 function Interface(){
@@ -40,7 +40,7 @@ function Interface(){
               throw new Error('Network response was not ok');
           }
           console.log(await response.json());
-          console.log("Response from backend:", responseData);  // Log the response from the backend
+          // console.log("Response from backend:", responseData);  // Log the response from the backend
       } catch (error) {
           console.error('Error toggling solenoids:', error);
           setSolState(prevState => ({
