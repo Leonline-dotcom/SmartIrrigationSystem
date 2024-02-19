@@ -37,6 +37,7 @@ def register_esp():
     data = request.json
     ESP32_IP = data['ip']
     print(f"ESP32 IP Address Updated: {ESP32_IP}")
+    app.logger.info(f"ESP32 IP Address Updated: {ESP32_IP}")
     print(ESP32_IP)
     return jsonify({"message": "ESP32 IP registered successfully"}), 200
 
@@ -45,8 +46,10 @@ def register_esp():
 @app.route('/api/toggle-solenoids', methods=['POST'])
 def toggle_solenoids():
     print(f"ESP32_IP: {ESP32_IP}")  # Print the ESP32 IP address
+    app.logger.info(f"ESP32 Address in toggle_solenoids: {ESP32_IP}")
     solenoid_states = request.json
     print(f"Solenoid States Received: {solenoid_states}")  # Print the received solenoid states
+    app.logger.info(f"Solenoid States Received: {solenoid_states}")
     try:
         # Forward the request to the ESP32 server
         response = requests.post(f"http://{ESP32_IP}/api/toggle-solenoids", json=solenoid_states)
@@ -57,6 +60,7 @@ def toggle_solenoids():
             return jsonify({"error": "Failed to toggle solenoids", "details": response.text}), response.status_code
     except Exception as e:
         print(f"Error connecting to ESP32: {str(e)}")  # Print any connection errors
+        app.logger.info(f"Error connecting to ESP32: {str(e)}")
         return jsonify({"error": "Failed to connect to ESP32", "details": str(e)}), 500
 
 
