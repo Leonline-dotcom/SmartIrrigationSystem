@@ -4,10 +4,12 @@ import logging
 import json
 import time
 from logging.handlers import RotatingFileHandler
+from threading import Lock
 
 app = Flask(__name__)
 CORS(app)
 
+solenoids_lock = Lock()
 
 
 # Initialize solenoid states
@@ -30,15 +32,16 @@ def toggle_solenoid():
     data = request.json  # Expecting a JSON payload with solenoid states
     app.logger.info(f"Received toggle request: {data}")
     try:
-        for solenoid, state in data.items():
-            if solenoid in solenoids:
-                solenoids[solenoid] = state
-                app.logger.info(f"Toggled {solenoid} to {state}")
-            else:
-                app.logger.error(f"Invalid solenoid ID: {solenoid}")
-                return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
-        notify_subscribers()  # Notify all subscribers about the update
-        return jsonify(solenoids), 200
+        with solenoids_lock:
+            for solenoid, state in data.items():
+                if solenoid in solenoids:
+                    solenoids[solenoid] = state
+                    app.logger.info(f"Toggled {solenoid} to {state}")
+                else:
+                    app.logger.error(f"Invalid solenoid ID: {solenoid}")
+                    return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
+            notify_subscribers()  # Notify all subscribers about the update
+            return jsonify(solenoids), 200
     except Exception as e:
         app.logger.error(f"Error handling toggle request: {str(e)}")
         return jsonify({"error": "Error processing request"}), 500
