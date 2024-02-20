@@ -27,13 +27,21 @@ subscribers = []
 def toggle_solenoid():
     global solenoids
     data = request.json  # Expecting a JSON payload with solenoid states
-    for solenoid, state in data.items():
-        if solenoid in solenoids:
-            solenoids[solenoid] = state
-        else:
-            return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
-    notify_subscribers()  # Notify all subscribers about the update
-    return jsonify(solenoids), 200
+    app.logger.info(f"Received toggle request: {data}")
+    try:
+        for solenoid, state in data.items():
+            if solenoid in solenoids:
+                solenoids[solenoid] = state
+                app.logger.info(f"Toggled {solenoid} to {state}")
+            else:
+                app.logger.error(f"Invalid solenoid ID: {solenoid}")
+                return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
+        notify_subscribers()  # Notify all subscribers about the update
+        return jsonify(solenoids), 200
+    except Exception as e:
+        app.logger.error(f"Error handling toggle request: {str(e)}")
+        return jsonify({"error": "Error processing request"}), 500
+        
 
 @app.route('/events')
 def solenoid_events():
@@ -41,6 +49,7 @@ def solenoid_events():
         while True:
             if subscribers:
                 event_data = json.dumps(solenoids)
+                app.logger.info("Sending update to subscribers")
                 yield f"data: {event_data}\n\n"
                 subscribers.clear()  # Clear the list after notifying
             time.sleep(1)
@@ -49,11 +58,13 @@ def solenoid_events():
 # API to get the current state of all solenoids
 @app.route('/api/solenoid-states', methods=['GET'])
 def get_solenoid_states():
+    app.logger.info("Received request for solenoid states")
     return jsonify(solenoids), 200
 
 
 def notify_subscribers():
     subscribers.append(1)  # Add a dummy value to indicate a new update
+    app.logger.info("Notified subscribers")
 
 
 if not app.debug:
