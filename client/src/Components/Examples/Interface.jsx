@@ -12,7 +12,7 @@ const API_URL = "http://oasis-flow.com";      //Website URL
 function Interface(){
     const [solState, setSolState] = useState({
         solenoid1: false,
-        solenoid2: false,
+        solenoid2: true,
         solenoid3: false,
         solenoid4: false,
       });

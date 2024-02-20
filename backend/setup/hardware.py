@@ -14,7 +14,7 @@ CORS(app)
 solenoids = {
     "solenoid1": False,
     "solenoid2": False,
-    "solenoid3": False,
+    "solenoid3": True,
     "solenoid4": False
 }
 #Error testing
