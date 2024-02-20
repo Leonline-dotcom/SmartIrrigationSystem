@@ -1,20 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
-import requests
-import socket
 import logging
+import json
+import time
 from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 CORS(app)
 
-# To allow specific domains
-CORS(app, resources={r"/api/*": {"origins": "http://www.oasis-flow.com"}})
-
-#https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
-#^^^ Explaining how to put our flasks in multiple files
-
-connection_status = {"connected": False}
 
 # Initialize solenoid states
 solenoids = {
@@ -27,60 +20,40 @@ solenoids = {
 #TODO Write a indication the esp32 is connected to the internet
 
 
-@app.route('/api/test', methods=['GET'])
-def test_endpoint():
-    # This is just a simple response to indicate that the request was successful
-    return jsonify({"message": "Test endpoint hit successfully"}), 200
+subscribers = []
 
 
-# ESP32_IP = None
-@app.route('/api/register-esp', methods=['POST'])
-def register_esp():
-    # global ESP32_IP
-    data = request.json
-    ESP32_IP = data['ip']
-    with open("esp32_ip.txt", "w") as ip_file:
-        ip_file.write(ESP32_IP)
-    print(f"ESP32 IP Address Updated: {ESP32_IP}")
-    app.logger.info(f"ESP32 IP Address Updated: {ESP32_IP}")
-    print(ESP32_IP)
-    return jsonify({"message": "ESP32 IP registered successfully"}), 200
-
-
-# ESP32_IP = '10.159.64.103'  # Replace with the ESP32's IP address from the arduino serial monitor
-@app.route('/api/toggle-solenoids', methods=['POST'])
-def toggle_solenoids():
-    # print(f"ESP32_IP: {ESP32_IP}")  # Print the ESP32 IP address
-    # app.logger.info(f"ESP32 Address in toggle_solenoids: {ESP32_IP}")
-    try:
-        with open("esp32_ip.txt", "r") as ip_file:
-            ESP32_IP = ip_file.read().strip()
-            if not ESP32_IP:
-                raise ValueError("ESP32 IP is empty.")
-    except FileNotFoundError:
-        app.logger.error("ESP32 IP address file not found.")
-        return jsonify({"error": "ESP32 IP address not found"}), 500
-    except ValueError as e:
-        app.logger.error(str(e))
-        return jsonify({"error": str(e)}), 500
-    
-    solenoid_states = request.json
-    print("ESP32_IP:", ESP32_IP)
-    print(f"Solenoid States Received: {solenoid_states}")  # Print the received solenoid states
-    app.logger.info(f"Solenoid States Received: {solenoid_states}")
-    try:
-        # Forward the request to the ESP32 server
-        app.logger.info(f"http://{ESP32_IP}/api/toggle-solenoids")
-        response = requests.post(f"http://{ESP32_IP}/api/toggle-solenoids", json=solenoid_states)
-        # response = requests.post(f"http://10.2.242.249/api/toggle-solenoids", json=solenoid_states)
-        if response.status_code == 200:
-            return jsonify({"message": "Solenoids toggled successfully"}), 200
+@app.route('/api/toggle-solenoid', methods=['POST'])
+def toggle_solenoid():
+    global solenoids
+    data = request.json  # Expecting a JSON payload with solenoid states
+    for solenoid, state in data.items():
+        if solenoid in solenoids:
+            solenoids[solenoid] = state
         else:
-            return jsonify({"error": "Failed to toggle solenoids", "details": response.text}), response.status_code
-    except Exception as e:
-        print(f"Error connecting to ESP32: {str(e)}")  # Print any connection errors
-        app.logger.info(f"Error connecting to ESP32: {str(e)}")
-        return jsonify({"error": "Failed to connect to ESP32", "details": str(e)}), 500
+            return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
+    notify_subscribers()  # Notify all subscribers about the update
+    return jsonify(solenoids), 200
+
+@app.route('/events')
+def solenoid_events():
+    def stream():
+        while True:
+            if subscribers:
+                event_data = json.dumps(solenoids)
+                yield f"data: {event_data}\n\n"
+                subscribers.clear()  # Clear the list after notifying
+            time.sleep(1)
+    return Response(stream(), content_type='text/event-stream')
+
+# API to get the current state of all solenoids
+@app.route('/api/solenoid-states', methods=['GET'])
+def get_solenoid_states():
+    return jsonify(solenoids), 200
+
+
+def notify_subscribers():
+    subscribers.append(1)  # Add a dummy value to indicate a new update
 
 
 if not app.debug:
@@ -99,6 +72,6 @@ if __name__ == '__main__':
     # hostname = socket.gethostname()
     # local_ip = socket.gethostbyname(hostname)
     # print(f"Flask server can be reached at: {local_ip}:5001")
-    app.run(host='0.0.0.0', port=5001) # Run in 5001 for localhost
+    app.run(host='0.0.0.0', port=5001, threaded=True) # Run in 5001 for localhost
     app.debug = True
     # app.run(host='0.0.0.0', port=5000) # Run in 5000 for production on AWS
