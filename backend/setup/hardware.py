@@ -6,8 +6,8 @@ import time
 from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
-# CORS(app)
-CORS(app, resources={r"/api/*": {"origins": "http://www.oasis-flow.com"}})
+CORS(app)
+
 
 
 # Initialize solenoid states
