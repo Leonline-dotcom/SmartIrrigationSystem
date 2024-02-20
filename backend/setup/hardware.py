@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response, jsonify, make_response
 from flask_cors import CORS
 import logging
 import json
@@ -60,7 +60,10 @@ def solenoid_events():
 @app.route('/api/solenoid-states', methods=['GET'])
 def get_solenoid_states():
     app.logger.info("Received request for solenoid states")
-    return jsonify(solenoids), 200
+    response = make_response(jsonify(solenoids), 200)
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response
+
 
 
 def notify_subscribers():
