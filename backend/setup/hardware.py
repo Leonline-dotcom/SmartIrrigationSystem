@@ -4,23 +4,42 @@ import logging
 import json
 import time
 from logging.handlers import RotatingFileHandler
-from threading import Lock
+# from threading import Lock
 
 app = Flask(__name__)
 CORS(app)
 
-solenoids_lock = Lock()
+# solenoids_lock = Lock()
 
+STATE_FILE = 'solenoid_states.txt'
 
 # Initialize solenoid states
-solenoids = {
-    "solenoid1": False,
-    "solenoid2": False,
-    "solenoid3": True,
-    "solenoid4": False
-}
+# solenoids = {
+#     "solenoid1": False,
+#     "solenoid2": False,
+#     "solenoid3": True,
+#     "solenoid4": False
+# }
 #Error testing
 #TODO Write a indication the esp32 is connected to the internet
+
+
+def read_solenoid_states():
+    try:
+        with open(STATE_FILE, 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Return default state if file does not exist or is empty/corrupted
+        return {
+            "solenoid1": False,
+            "solenoid2": False,
+            "solenoid3": False,
+            "solenoid4": False
+        }
+    
+def write_solenoid_states(states):
+    with open(STATE_FILE, 'w') as f:
+        json.dump(states, f)
 
 
 subscribers = []
@@ -31,8 +50,9 @@ def toggle_solenoid():
     global solenoids
     data = request.json  # Expecting a JSON payload with solenoid states
     app.logger.info(f"Received toggle request: {data}")
+    solenoids = read_solenoid_states()
     try:
-        with solenoids_lock:
+        # with solenoids_lock:
             for solenoid, state in data.items():
                 if solenoid in solenoids:
                     solenoids[solenoid] = state
@@ -41,6 +61,7 @@ def toggle_solenoid():
                     app.logger.error(f"Invalid solenoid ID: {solenoid}")
                     return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
             notify_subscribers()  # Notify all subscribers about the update
+            write_solenoid_states(solenoids)
             return jsonify(solenoids), 200
     except Exception as e:
         app.logger.error(f"Error handling toggle request: {str(e)}")
@@ -63,6 +84,7 @@ def solenoid_events():
 @app.route('/api/solenoid-states', methods=['GET'])
 def get_solenoid_states():
     app.logger.info("Received request for solenoid states")
+    solenoids = read_solenoid_states()
     app.logger.debug(f"Current solenoid states: {solenoids}")
     response = make_response(jsonify(solenoids), 200)
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
