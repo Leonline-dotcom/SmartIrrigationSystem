@@ -60,9 +60,12 @@ def solenoid_events():
 @app.route('/api/solenoid-states', methods=['GET'])
 def get_solenoid_states():
     app.logger.info("Received request for solenoid states")
+    app.logger.debug(f"Current solenoid states: {solenoids}")
     response = make_response(jsonify(solenoids), 200)
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
     return response
+
 
 
 

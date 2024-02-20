@@ -19,10 +19,25 @@ function Interface(){
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+    useEffect(() => {
+      const fetchSolenoidStates = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/api/solenoid-states`);
+          console.log("Fetched solenoid states:", response.data);
+          setSolState(response.data);  // Update the component's state with fetched data
+        } catch (error) {
+          console.error('Error fetching solenoid states:', error);
+        }
+      };
+  
+      fetchSolenoidStates();
+    }, []);
+
+
     const toggleSolenoid = async (solenoid) => {
       const updatedStates = { ...solState, [solenoid]: !solState[solenoid] };
       setSolState(updatedStates);
-    
+      console.log("Sending toggle request:", updatedStates);
       try {
         const response = await axios.post(`${API_URL}/api/toggle-solenoid`, updatedStates, {
           headers: {
