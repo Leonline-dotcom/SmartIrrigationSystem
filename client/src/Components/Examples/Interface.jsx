@@ -36,37 +36,6 @@ function Interface(){
     };
     
 
-  //   const toggleSolenoid = async (solenoid) => {
-  //     const newState = !solState[solenoid];
-  //     const updatedStates = { ...solState, [solenoid]: newState };
-
-  //     setSolState(updatedStates);
-
-  //     console.log(`Toggling ${solenoid}: ${newState}`);  // Log the solenoid being toggled and its new state
-  //     console.log("Updated States:", updatedStates);  // Log the updated states being sent to the backend
-  //     try {
-  //         const response = await fetch(`${API_URL}/api/toggle-solenoids`, {
-  //             method: 'POST',
-  //             headers: {
-  //                 'Content-Type': 'application/json',
-  //             },
-  //             body: JSON.stringify(updatedStates),
-  //         });
-
-  //         if (!response.ok) {
-  //             throw new Error('Network response was not ok');
-  //         }
-  //         console.log(await response.json());
-  //         // console.log("Response from backend:", responseData);  // Log the response from the backend
-  //     } catch (error) {
-  //         console.error('Error toggling solenoids:', error);
-  //         setSolState(prevState => ({
-  //             ...prevState,
-  //             [solenoid]: !newState
-  //         }));
-  //     }
-  // };
-
     return (
         <div className="interface-grid">
         {Object.entries(solState).map(([solenoid, isOn], index) => (

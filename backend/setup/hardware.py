@@ -6,7 +6,8 @@ import time
 from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://www.oasis-flow.com"}})
 
 
 # Initialize solenoid states
@@ -65,6 +66,20 @@ def get_solenoid_states():
 def notify_subscribers():
     subscribers.append(1)  # Add a dummy value to indicate a new update
     app.logger.info("Notified subscribers")
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # Log the error
+    app.logger.error(f"An error occurred: {str(e)}")
+
+    # Return a JSON response with the error
+    return jsonify(error=str(e)), 500
+
+@app.before_request
+def log_request_info():
+    app.logger.debug(f"Headers: {request.headers}")
+    app.logger.debug(f"Body: {request.get_data()}")
 
 
 if not app.debug:
