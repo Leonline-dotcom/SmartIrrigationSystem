@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Interface.css';  // Assume you have a CSS file for styles
+//TODO change the .env to make it easier for test or real deployment
+
+
+//Comment out which one the test enviroment is not.
+// const API_URL = "http://10.145.23.255:5001";  //Local Host URL
+const API_URL = "http://oasis-flow.com";      //Website URL
+
 
 function Interface(){
     const [solState, setSolState] = useState({
@@ -11,44 +19,37 @@ function Interface(){
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+    useEffect(() => {
+      const fetchSolenoidStates = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/api/solenoid-states`);
+          console.log("Fetched solenoid states:", response.data);
+          setSolState(response.data);  // Update the component's state with fetched data
+        } catch (error) {
+          console.error('Error fetching solenoid states:', error);
+        }
+      };
+  
+      fetchSolenoidStates();
+    }, []);
+
 
     const toggleSolenoid = async (solenoid) => {
-        setIsButtonDisabled(true);  // Disable button
-        const newState = !solState[solenoid];
-        setSolState(prevState => ({
-            ...prevState,
-            [solenoid]: newState
-        }));
-
-        try {
-            // http://10.147.74.162:5001/api/toggle-solenoid/${solenoid}
-            const response = await fetch(`http://oasis-flow.com/api/toggle-solenoid/${solenoid}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ newState }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            // Handle response data here if needed
-            const data = await response.json();
-            console.log(data);
-
-        } catch (error) {
-            console.error('Error toggling solenoid:', error);
-            // Optionally, revert the state if the API call fails
-            setSolState(prevState => ({
-                ...prevState,
-                [solenoid]: !newState
-            }));
-        }
-        setIsButtonDisabled(false);  // Re-enable button after state update
+      const updatedStates = { ...solState, [solenoid]: !solState[solenoid] };
+      setSolState(updatedStates);
+      console.log("Sending toggle request:", updatedStates);
+      try {
+        const response = await axios.post(`${API_URL}/api/toggle-solenoid`, updatedStates, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("Response from backend:", response.data);
+      } catch (error) {
+        console.error('Error toggling solenoids:', error);
+      }
     };
-
+    
 
     return (
         <div className="interface-grid">
