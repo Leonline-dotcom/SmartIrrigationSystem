@@ -8,6 +8,8 @@ import ESP32 from './Components/Examples/ESP32Example'
 import Template from './Components/Examples/Templates'
 import Zones from './Components/Zones/ZoneList'
 import Zone from './Components/Zones/Zone'
+import WaterCap from './Components/TankCapacity/WaterCap'
+import Weather from  './Components/Weather Display/Weather'
 import Interface from './Components/Examples/Interface';
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
