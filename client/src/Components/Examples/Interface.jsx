@@ -5,7 +5,7 @@ import './Interface.css';  // Assume you have a CSS file for styles
 
 
 //Comment out which one the test enviroment is not.
-// const API_URL = "http://10.145.23.255:5001";  //Local Host URL
+// const API_URL = "http://10.159.69.70:5001";  //Local Host URL
 const API_URL = "http://oasis-flow.com";      //Website URL
 
 
@@ -17,7 +17,15 @@ function Interface(){
         solenoid4: false,
       });
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [systemStatus, setSystemStatus] = useState({
+        battery: "Placeholder",
+        waterLevel: "Placeholder",
+        moistureSensor: "Placeholder",
+      });
+
+    const [pumpStatus, setPumpStatus] = useState(false);
+
+    const [ultrasonic, setUltrasonic] = useState("Loading...");
 
     useEffect(() => {
       const fetchSolenoidStates = async () => {
@@ -29,9 +37,50 @@ function Interface(){
           console.error('Error fetching solenoid states:', error);
         }
       };
+
+      const fetchPumpState = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/api/pump-state`)
+          console.log("Fetched pump states: ", response.data)
+          setPumpStatus(response.data)
+        } catch (error) {
+          console.error('Error fetching pump state:', error)
+        }
+
+      };
+
+      const waterLevelSource = new EventSource(`${API_URL}/api/water-level-stream`);
+
+      waterLevelSource.onmessage = (event) => {
+          const newWaterLevel = JSON.parse(event.data);
+          setSystemStatus((prevStatus) => ({
+              ...prevStatus,
+              waterLevel: newWaterLevel.waterLevel,
+          }));
+      };
   
       fetchSolenoidStates();
+      fetchPumpState();
+      return () => {
+          waterLevelSource.close();
+      };
     }, []);
+
+    const togglePump = async () => { // New function for toggling the pump
+      const updatedPumpStatus = !pumpStatus
+      console.log("Toggling pump status to:", updatedPumpStatus);
+      try {
+        const response = await axios.post(`${API_URL}/api/toggle-pump`, { pump: updatedPumpStatus }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("Response from backend:", response.data);
+        setPumpStatus(response.data.pumpStatus);
+      } catch (error) {
+        console.error('Error toggling pump:', error);
+      }
+    };
 
 
     const toggleSolenoid = async (solenoid) => {
@@ -52,16 +101,30 @@ function Interface(){
     
 
     return (
+      <div>
         <div className="interface-grid">
-        {Object.entries(solState).map(([solenoid, isOn], index) => (
-          <div key={solenoid} className={`solenoid-container solenoid-${index + 1}`}>
-            <h2>{`Zone ${index + 1} Solenoid`}</h2>
-            <div className="status-indicator" style={{ backgroundColor: isOn ? 'green' : 'red' }}></div>
-            <button onClick={() => toggleSolenoid(solenoid)}>
-              {isOn ? 'Turn Off' : 'Turn On'}
-            </button>
-          </div>
-        ))}
+          {Object.entries(solState).map(([solenoid, isOn], index) => (
+            <div key={solenoid} className={`solenoid-container solenoid-${index + 1}`}>
+              <h2>{`Zone ${index + 1} Solenoid`}</h2>
+              <div className="status-indicator" style={{ backgroundColor: isOn ? 'green' : 'red' }}></div>
+              <button onClick={() => toggleSolenoid(solenoid)}>
+                {isOn ? 'Turn Off' : 'Turn On'}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="pump-control"> {/* New section for pump control */}
+        <h2>Pump Control</h2>
+        <div className="status-indicator" style={{ backgroundColor: pumpStatus ? 'green' : 'red' }}></div>
+        <button onClick={togglePump}>
+          {pumpStatus ? 'Turn Off' : 'Turn On'}
+        </button>
+      </div>
+        <div className="system-status">
+          <div className="status-item"><span>Battery: </span>{systemStatus.battery}</div>
+          <div className="status-item"><span>Water Level: </span>{systemStatus.waterLevel}</div>
+          <div className="status-item"><span>Moisture Sensor: </span>{systemStatus.moistureSensor}</div>
+        </div>
       </div>
     );
 }
