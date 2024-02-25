@@ -53,7 +53,7 @@ def read_water_level():
         print(f"Error reading water level: {e}")
         return {"waterLevel": "Unknown"}
 
-TIMEOUT_THRESHOLD = 5.1  # Time out needs to bigger than the delay on the esp32
+TIMEOUT_THRESHOLD = 10  # Time out needs to bigger than the delay on the esp32
 def read_esp32_status():
     try:
         with open(ESP32_STATUS, 'r') as f:
