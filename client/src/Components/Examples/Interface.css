@@ -11,6 +11,25 @@ body {
     padding: 40px;
     /*height: 100vh; /* Adjust based on your layout */
   }
+
+.top-status-row {
+    display: flex;
+    justify-content: space-around; /* Adjust this to center if it doesn't align well */
+    padding: 20px;
+    margin-bottom: 20px; /* Space between this row and the solenoid controls */
+}
+
+.esp32-status, .pump-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #444; /* Slightly lighter grey for containers */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners for the containers */
+  width: calc(50% - 40px); /* Adjust the width as necessary */
+}
   
 .solenoid-container {
     display: flex;
@@ -23,19 +42,6 @@ body {
     border-radius: 10px; /* Rounded corners for the containers */
 }
 
-.pump-control {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background-color: #444;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px auto; /* Center the pump control and add some margin around it */
-  width: calc(25% - 40px); 
-}
-  
 .status-indicator {
     width: 20px;
     height: 20px;

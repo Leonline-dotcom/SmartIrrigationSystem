@@ -11,8 +11,9 @@ app = Flask(__name__)
 CORS(app)
 
 STATE_FILE = 'solenoid_states.txt'
-WATER_LEVEL_FILE = 'water_level.txt'
+WATER_LEVEL = 'water_level.txt'
 PUMP_STATUS = 'pump_state.txt'
+ESP32_STATUS = 'esp32_status.txt'
 
 subscribers = []
 
@@ -46,11 +47,25 @@ def read_pump_state():
     
 def read_water_level():
     try:
-        with open(WATER_LEVEL_FILE, 'r') as file:
+        with open(WATER_LEVEL, 'r') as file:
             return json.load(file)
     except Exception as e:
         print(f"Error reading water level: {e}")
         return {"waterLevel": "Unknown"}
+
+TIMEOUT_THRESHOLD = 5.1  # Time out needs to bigger than the delay on the esp32
+def read_esp32_status():
+    try:
+        with open(ESP32_STATUS, 'r') as f:
+            status = json.load(f)
+            last_update = status.get("last_update", 0)
+            if time.time() - last_update > TIMEOUT_THRESHOLD:
+                # If the last update is older than the threshold, assume disconnected
+                return {'connected': False, 'network': 'None'}
+            return status
+    except Exception as e:
+        print(f"Error reading esp32 status: {e}")
+        return {'connected': False, 'network': 'None'}
 
 def write_pump_state(state):
     with open(PUMP_STATUS, 'w') as f:
@@ -62,10 +77,16 @@ def write_solenoid_states(states):
 
 def write_water_level(data):
     try:
-        with open(WATER_LEVEL_FILE, 'w') as file:
+        with open(WATER_LEVEL, 'w') as file:
             json.dump(data, file)
     except Exception as e:
         print(f"Error writing water level: {e}")
+
+def write_esp32_status(status):
+    status_with_timestamp = status.copy()
+    status_with_timestamp["last_update"] = time.time()  # Adds the current timestamp
+    with open(ESP32_STATUS, "w") as f:
+        json.dump(status_with_timestamp, f)
 
 @app.route('/api/toggle-solenoid', methods=['POST'])
 def toggle_solenoid():
@@ -159,7 +180,25 @@ def water_level_stream():
 
     return Response(stream_with_context(stream()), content_type='text/event-stream')
 
+@app.route('/api/update-esp32-status', methods=['POST'])
+def update_esp32_status():
+    data = request.get_json()
+    esp32_status = {
+        'connected': data.get('connected', False),
+        'network': data.get('network', 'None')
+    }
+    write_esp32_status(esp32_status)
+    return jsonify({"success": True}), 200
 
+@app.route('/api/esp32-status-stream')
+def esp32_status_stream():
+    def stream():
+        while True:
+            status = read_esp32_status()
+            yield f"data: {json.dumps(status)}\n\n"
+            time.sleep(1)  # Stream update every 1 second
+
+    return Response(stream(), content_type='text/event-stream')
 
 def notify_subscribers():
     subscribers.append(1)  # Add a dummy value to indicate a new update

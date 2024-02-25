@@ -1,0 +1,1 @@
+{"connected": true, "network": "utexas-iot", "last_update": 1708900663.589348}

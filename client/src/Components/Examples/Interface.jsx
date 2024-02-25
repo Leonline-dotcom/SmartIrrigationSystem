@@ -23,9 +23,8 @@ function Interface(){
         moistureSensor: "Placeholder",
       });
 
+    const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
     const [pumpStatus, setPumpStatus] = useState(false);
-
-    const [ultrasonic, setUltrasonic] = useState("Loading...");
 
     useEffect(() => {
       const fetchSolenoidStates = async () => {
@@ -58,11 +57,18 @@ function Interface(){
               waterLevel: newWaterLevel.waterLevel,
           }));
       };
+
+      const esp32StatusSource = new EventSource(`${API_URL}/api/esp32-status-stream`);
+      esp32StatusSource.onmessage = (event) => {
+        const status = JSON.parse(event.data);
+        setEsp32Status(status);
+      };
   
       fetchSolenoidStates();
       fetchPumpState();
       return () => {
           waterLevelSource.close();
+          esp32StatusSource.close();
       };
     }, []);
 
@@ -102,6 +108,23 @@ function Interface(){
 
     return (
       <div>
+        <div className="top-status-row">
+          <div className="esp32-status">
+            <h2>ESP32 Status</h2>
+            <div className="status-indicator" style={{ backgroundColor: esp32Status.connected ? 'green' : 'red' }}></div>
+            <p>{esp32Status.connected ? 'Connected' : 'Disconnected'}</p>
+            {esp32Status.connected && <p>WiFi Network: {esp32Status.network}</p>}
+          </div>
+  
+          <div className="pump-control">
+            <h2>Pump Control</h2>
+            <div className="status-indicator" style={{ backgroundColor: pumpStatus ? 'green' : 'red' }}></div>
+            <button onClick={togglePump}>
+              {pumpStatus ? 'Turn Off' : 'Turn On'}
+            </button>
+          </div>
+        </div>
+  
         <div className="interface-grid">
           {Object.entries(solState).map(([solenoid, isOn], index) => (
             <div key={solenoid} className={`solenoid-container solenoid-${index + 1}`}>
@@ -113,13 +136,7 @@ function Interface(){
             </div>
           ))}
         </div>
-        <div className="pump-control"> {/* New section for pump control */}
-        <h2>Pump Control</h2>
-        <div className="status-indicator" style={{ backgroundColor: pumpStatus ? 'green' : 'red' }}></div>
-        <button onClick={togglePump}>
-          {pumpStatus ? 'Turn Off' : 'Turn On'}
-        </button>
-      </div>
+  
         <div className="system-status">
           <div className="status-item"><span>Battery: </span>{systemStatus.battery}</div>
           <div className="status-item"><span>Water Level: </span>{systemStatus.waterLevel}</div>
