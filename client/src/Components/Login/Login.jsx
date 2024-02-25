@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import './Login.css'
 import '../../App.css'
-import { Link } from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
 
 //import icon
 import { FaUserShield } from "react-icons/fa";
@@ -74,10 +74,18 @@ export default function Login() {
          res => res.json()
      ).then(
          data => {
-           //setUserData(data)
+           setUserData(prevUserData => {
+               return {
+                    ...prevUserData,
+                    [userData.found]: data.found
+               }
+            })
            console.log(data)
          }
      )
+     if (userData.found) {
+         Navigate({to: '/Calendar'})
+     }
 
   }
 

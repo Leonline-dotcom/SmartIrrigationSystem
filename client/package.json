@@ -11,9 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "modal": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
+    "react-popup": "^0.11.2",
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {
@@ -26,5 +28,8 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "sass": "^1.69.5",
     "vite": "^5.0.8"
+  },
+  "resolutions": {
+    "domino": "Haringat/domino#2721294c75334ece635dfc72cad0a3dede7391fb"
   }
 }

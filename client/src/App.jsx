@@ -9,7 +9,7 @@ import {
     RouterProvider
 } from 'react-router-dom'
 import React from "react";
-
+import Calendar from "./Components/Scheduler/Calendar.jsx";
 
 //create router
 
@@ -25,6 +25,10 @@ const router = createBrowserRouter([
   {
     path:'/dashboard',
     element: <div><Dashboard/></div>
+  },
+  {
+    path: '/calendar',
+    element: <div><Calendar/></div>
   }
 
 ])

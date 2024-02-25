@@ -17,10 +17,56 @@ def addNewUser(username, password, email):
             insert = {"Password": password,
                       "Email": email,
                       "Name": "",
+                      "Schedule": {
+                          "Day": {
+                              "Monday": "",
+                              "Tuesday": "",
+                              "Wednesday": "",
+                              "Thursday": "",
+                              "Friday": "",
+                              "Saturday": "",
+                              "Sunday": "",
+                          }
+                      },
                       "Grid": {
                           "Zone1": {
-                              "Schedule": "",
-                              "History": "",
+                              "Schedule": {
+                                "Day": {
+                                    "Monday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Tuesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Wednesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Thursday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Friday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Saturday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Sunday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                }
+                              },
+                              "History": {
+                                  "Days": {},
+                                  "Time": {},
+                                  "Duration": {}
+                              },
                               "Moisture Level": "",
                               "Status": ""
                           },
