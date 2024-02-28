@@ -50,4 +50,22 @@
   grid-row: auto; /* Adjust as necessary */
   color: inherit; /* Inherits color from .modal-content */
 }
-  
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-content img, .timer-container {
+  max-width: 45%; /* Adjust this value as needed */
+}
+
+.modal-header, .modal-footer {
+  margin-bottom: 20px;
+}
+
+.modal-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-around; /* Adjust spacing as needed */
+}
