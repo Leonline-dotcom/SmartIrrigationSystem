@@ -1,50 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss'
-import Dashboard from './Components/Dasboard/Dashboard'
 import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
-import Setup from './Components/Setup/ConnectionStatus'
-import ESP32 from './Components/Examples/ESP32Example'
-import Template from './Components/Examples/Templates'
-import Zones from './Components/Zones/ZoneList'
-import Zone from './Components/Zones/Zone'
-import Interface from './Components/Examples/Interface';
+import ZoneOverview from './Components/Zones/ZoneOverview'
+import Interface from './Components/HardwareTesting/Interface'
+import Countdown1 from './Components/Zones/CountdownTimer'
+import Countdown2 from './Components/Zones/Timer'
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-// Testing changes
 function App(){
-  const [connectionInfo, setConnectionInfo] = useState({
-    connected: false,
-    ssid: '',
-    password: ''
-  });
 
-  const pollInterval = 1000;
-  //TODO Austin needs to clear App.jsx and put it in its appropriate component.
-  // useEffect(() => {
-  //   let intervalId = null;
-
-  //   const checkConnection = async () => {
-  //     try {
-  //       // const response = await fetch('http://oasis-flow.com/api/esp-status');
-  //       const response = await fetch('http://localhost:5001/api/esp-status');
-  //       const data = await response.json();
-  //       console.log('Received data:', data);
-  //       setConnectionInfo(data);
-  //     } catch (error) {
-  //       console.error('Error fetching connection status:', error);
-  //       setConnectionInfo({ connected: false, ssid: 'Error', password: 'Error' });
-  //     }
-  //   };
-
-  //   // checkConnection();
-    
-  //   intervalId = setInterval(checkConnection, pollInterval);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-//create router
+//Router
 const router = createBrowserRouter([
   {
     path:'/*',
@@ -55,32 +21,21 @@ const router = createBrowserRouter([
     element: <div><Register/></div>
   },
   {
-    path:'/dashboard',
-    element: <div><Dashboard/></div>
-  },
-  {
-    path:'/setup',
-    element: <Setup connectionInfo={connectionInfo} />
-  },
-  {
-    path:'/esp32',
-    element: <ESP32/>
-  },
-  {
-    path:'/template',
-    element: <Template/>
-  },
-  {
     path: '/zones',
-    element: <Zones/>,
-  },
-  {
-    path: '/zones/:zoneId', element: <Zone/>
+    element: <ZoneOverview/>,
   },
   {
     path: '/interface',
     element: <Interface/>
   },
+  {
+    path: 'countdown1',
+    element: <Countdown1/>
+  },
+  {
+    path: 'countdown2',
+    element: <Countdown2/>
+  }
   // {
   //   path: '/capacity',
   //   element: <WaterCap/>
@@ -90,8 +45,6 @@ const router = createBrowserRouter([
   //   element: <Weather/>
   // }
 ]);
-
-
 
   return (
     <div>
