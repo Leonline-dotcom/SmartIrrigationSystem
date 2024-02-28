@@ -4,8 +4,6 @@ import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import ZoneOverview from './Components/Zones/ZoneOverview'
 import Interface from './Components/HardwareTesting/Interface'
-import Countdown1 from './Components/Zones/CountdownTimer'
-import Countdown2 from './Components/Zones/Timer'
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App(){
@@ -27,14 +25,6 @@ const router = createBrowserRouter([
   {
     path: '/interface',
     element: <Interface/>
-  },
-  {
-    path: 'countdown1',
-    element: <Countdown1/>
-  },
-  {
-    path: 'countdown2',
-    element: <Countdown2/>
   }
   // {
   //   path: '/capacity',
