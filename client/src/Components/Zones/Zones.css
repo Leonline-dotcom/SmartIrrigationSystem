@@ -1,35 +1,35 @@
 .zoneOverview-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates two columns */
-    gap: 30px; /* Adjust the gap as needed */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px; 
     max-width: 800px;
-    margin: 0 auto; /* Center the grid */
+    margin: 0 auto; 
 }
 
 .zone-item {
-    background-color: #f0f0f0; /* Example background color */
+    background-color: #f0f0f0;
     padding: 20px;
     text-align: center;
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.2); /* Simple shadow for depth */
+    border-radius: 10px; 
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2); 
 }
 
 .zone-item h2 {
     text-decoration: none;
-    color: #333; /* Dark text for visibility */
+    color: #333; 
     font-weight: bold;
 }
 
 .zone-item h3 {
     text-decoration: none;
-    color: #333; /* Dark text for visibility */
+    color: #333; 
     font-weight: bold;
 }
 
 
 .zone-item p {
     text-decoration: none;
-    color: #333; /* Dark text for visibility */
+    color: #333; 
 }
 
 .zone-item:hover {
