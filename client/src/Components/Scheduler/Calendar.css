@@ -1,0 +1,41 @@
+.calendar-container .react-calendar{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.calendar-container .react-calendar__tile {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.parent-container {
+  width: 100%;
+  height: 100%;
+}
+
+.popup {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-button {
+  width: 100%;
+}
+
+.popup-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.days-container,
+.time-container,
+.duration-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
