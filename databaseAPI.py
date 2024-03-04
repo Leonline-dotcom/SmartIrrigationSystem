@@ -71,20 +71,125 @@ def addNewUser(username, password, email):
                               "Status": ""
                           },
                           "Zone2": {
-                              "Schedule": "",
-                              "History": "",
+                              "Schedule": {
+                                "Day": {
+                                    "Monday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Tuesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Wednesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Thursday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Friday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Saturday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Sunday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                }
+                              },
+                              "History": {
+                                  "Days": {},
+                                  "Time": {},
+                                  "Duration": {}
+                              },
                               "Moisture Level": "",
                               "Status": ""
                           },
                           "Zone3": {
-                              "Schedule": "",
-                              "History": "",
+                              "Schedule": {
+                                "Day": {
+                                    "Monday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Tuesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Wednesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Thursday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Friday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Saturday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Sunday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                }
+                              },
+                              "History": {
+                                  "Days": {},
+                                  "Time": {},
+                                  "Duration": {}
+                              },
                               "Moisture Level": "",
                               "Status": ""
                           },
                           "Zone4": {
-                              "Schedule": "",
-                              "History": "",
+                              "Schedule": {
+                                "Day": {
+                                    "Monday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Tuesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Wednesday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Thursday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Friday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Saturday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                    "Sunday": {
+                                        "Time": "",
+                                        "Duration": ""
+                                    },
+                                }
+                              },
+                              "History": {
+                                  "Days": {},
+                                  "Time": {},
+                                  "Duration": {}
+                              },
                               "Moisture Level": "",
                               "Status": ""
                           },
