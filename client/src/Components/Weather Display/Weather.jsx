@@ -1,9 +1,13 @@
- import React from 'react'
+import React,{useState,useEffect} from 'react'
 
- export default function Weather() {
-    return (
-      <div>
-        This be the weather componet
-      </div>
-    )
-  }
+//TODO: Leon must pull location from the UserDatabase
+
+//For now the location is Austin
+
+function Weather() {
+  return (
+    <div>Weather</div>
+  )
+}
+
+export default Weather
