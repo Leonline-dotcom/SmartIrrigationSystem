@@ -1,6 +1,0 @@
-List of all of our api's In and Out
-
-IN:
-
-
-OUT:

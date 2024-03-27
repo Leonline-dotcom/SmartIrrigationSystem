@@ -1,0 +1,80 @@
+body {
+  background-color: #333; /* Darkish grey background */
+  color: #fff; /* Light text for contrast */
+  font-family: Arial, sans-serif; /* Sans-serif font*/
+}
+
+.interface-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 40px;
+    /*height: 100vh; /* Adjust based on your layout */
+  }
+
+.top-status-row {
+    display: flex;
+    justify-content: space-around; /* Adjust this to center if it doesn't align well */
+    padding: 20px;
+    margin-bottom: 20px; /* Space between this row and the solenoid controls */
+}
+
+.esp32-status, .pump-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #444; /* Slightly lighter grey for containers */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners for the containers */
+  width: calc(50% - 40px); /* Adjust the width as necessary */
+}
+  
+.solenoid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #444; /* Slightly lighter grey for solenoid containers */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for the containers */
+}
+
+.status-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+  
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #789c7a; /* A greenish color for buttons */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s; /* Smooth background color transition on hover */
+}
+
+button:hover {
+    background-color: #3d7a40; /* Darker green on hover for feedback */
+}
+
+.system-status {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 20px; /* Add some space between the solenoids and system status */
+}
+
+  /* .status-item {
+    
+  } */
+h2 {
+    font-size: 1rem;
+    margin: 0; /* Remove default margins */
+    white-space: nowrap; /* Keep "Zone _ Solenoid" on the same line */
+}
+  
