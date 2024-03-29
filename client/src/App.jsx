@@ -31,15 +31,15 @@ const router = createBrowserRouter([
   {
     path: '/interface',
     element: <Interface/>
+  },
+  {
+    path: '/capacity',
+    element: <WaterCap/>
+  },
+  {
+    path: '/weather',
+    element: <Weather/>
   }
-  // {
-  //   path: '/capacity',
-  //   element: <WaterCap/>
-  // },
-  // {
-  //   path: '/weather',
-  //   element: <Weather/>
-  // }
 ]);
 
   return (
