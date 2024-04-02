@@ -11,9 +11,11 @@ allUsers = {
     "password": "testing"
 }
 
+
 @app.route("/")
 def hello():
     return "Bruh"
+
 
 @app.route("/login", methods=['POST'])
 def signIn():
@@ -26,6 +28,7 @@ def signIn():
     if db.authenticateUser(username, password):
         return jsonify({"message": "Login successful"})
     return jsonify({"message": "Invalid credentials"})
+
 
 @app.route("/register", methods=['POST'])
 def signUp():
@@ -42,6 +45,26 @@ def signUp():
     # Can optionally later customize this to display message such as "Username already taken",
     # "Password doesn't include ______", "Email is already associated to an account"
     return jsonify({"message": "Username already taken"})
+
+
+@app.route("/Calendar", methods=['POST'])
+def schedule():
+    creds = request.json
+    #username = creds.get('username')
+    username = "admin"
+    zone = creds.get('zone')
+    monday = creds.get('monday')
+    tuesday = creds.get('tuesday')
+    wednesday = creds.get('wednesday')
+    thursday = creds.get('thursday')
+    friday = creds.get('friday')
+    saturday = creds.get('saturday')
+    sunday = creds.get('sunday')
+    time = creds.get('time')
+    duration = creds.get('duration')
+    if db.addSchedule(username, zone, monday, tuesday, wednesday, thursday, friday, saturday, sunday, time, duration):
+        return jsonify({"message": "Successfully added schedule"})
+    return jsonify({"message": "Failed to add schedule"})
 
 
 # if __name__ == "__main__":

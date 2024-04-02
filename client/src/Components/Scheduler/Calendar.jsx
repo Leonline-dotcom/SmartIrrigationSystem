@@ -2,10 +2,11 @@ import React, {useState} from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css'
+import {Navigate} from "react-router-dom";
 
 export default function Calender(){
     const [zoneData, setZoneData] = useState(
-        {zone: "",
+        { zone: "Zone 1",
         monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false,
         time: "",
         duration: ""}
@@ -33,7 +34,26 @@ export default function Calender(){
 
     function handleSubmit(event) {
         event.preventDefault()
-        console.log(zoneData)
+        fetch("http://localhost:5001/Calendar", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(zoneData)
+        }).then(
+            res => res.json()
+        ).then(
+         data => {
+           setZoneData(prevUserData => {
+               return {
+                    ...prevUserData,
+                    [zoneData.found]: data.found
+               }
+            })
+           console.log(data)
+         }
+     )
+     if (zoneData.found) {
+         Navigate({to: '/Calendar'})
+     }
     }
 
     return (
