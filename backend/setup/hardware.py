@@ -5,6 +5,7 @@ import json
 import time
 from logging.handlers import RotatingFileHandler
 import socket
+import threading
 # from threading import Lock
 
 app = Flask(__name__)
@@ -23,10 +24,25 @@ subscribers = []
 def test():
     return "Test successful", 200
 
-def read_solenoid_states():
+def read_states():
     try:
         with open(STATE_FILE, 'r') as f:
             return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Return default state if file does not exist or is empty/corrupted
+        return {
+            "solenoid1": False,
+            "solenoid2": False,
+            "solenoid3": False,
+            "solenoid4": False
+        }
+
+def read_solenoid_states():
+    try:
+        with open(STATE_FILE, 'r') as f:
+            states = json.load(f)
+            print(f"Reading solenoid states for ESP32: {states}")
+            return states
     except (FileNotFoundError, json.JSONDecodeError):
         # Return default state if file does not exist or is empty/corrupted
         return {
@@ -72,8 +88,12 @@ def write_pump_state(state):
         json.dump(state, f)
     
 def write_solenoid_states(states):
-    with open(STATE_FILE, 'w') as f:
-        json.dump(states, f)
+    try:
+        with open(STATE_FILE, 'w') as f:
+            json.dump(states, f)
+        print(f"Writing solenoid states to file: {states}")
+    except Exception as e:
+        app.logger.error(f"Failed to write solenoid states: {e}")
 
 def write_water_level(data):
     try:
@@ -143,8 +163,16 @@ def solenoid_events():
 def get_solenoid_states():
     app.logger.info("Received request for solenoid states")
     solenoids = read_solenoid_states()
+
+    response_data = {
+        solenoid: state for solenoid, state in solenoids.items()
+        if solenoid.startswith('solenoid')  # Filter keys to include only solenoid states
+    }
+
+
     app.logger.debug(f"Current solenoid states: {solenoids}")
-    response = make_response(jsonify(solenoids), 200)
+    response = make_response(jsonify(response_data), 200)
+    print(f"Sending solenoid states to ESP32: {response_data}")
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
     return response
@@ -199,6 +227,123 @@ def esp32_status_stream():
             time.sleep(1)  # Stream update every 1 second
 
     return Response(stream(), content_type='text/event-stream')
+
+scheduled_runs = {}
+
+# NOTE: DOES NOT HAVE THE FILE READING TO RUN ON AWS
+@app.route('/api/quick-run', methods=['POST'])
+def schedule_run():
+    data = request.json
+    duration = data['duration']
+    zones = data['zones']
+    print(f"Run solenoids for {duration} seconds on zones {zones}")
+    
+    scheduled_runs['run'] = {
+        'duration': duration,
+        'zones': zones,
+        'timestamp': time.time()  # Store the timestamp of when this was scheduled
+    }
+
+    return jsonify({"success": True, "message": "Command to run solenoids received"}), 200
+
+@app.route('/api/quick-run-status', methods=['GET'])
+def get_scheduled_run():
+    # Check if there's a scheduled run and return it
+    if 'run' in scheduled_runs:
+        # You might want to add logic to only send runs that are still valid based on the current time
+        return jsonify(scheduled_runs['run']), 200
+    else:
+        # No scheduled run available
+        return jsonify({"message": "No scheduled run available"}), 404
+    
+solenoid_status = {}
+def turn_off_solenoid(solenoid_id):
+    # Function to turn off the solenoid, will be called after the duration
+    # Implement the logic to send a command to the ESP32 to turn off the solenoid
+    solenoids = read_solenoid_states()
+    solenoids[solenoid_id] = False
+    write_solenoid_states(solenoids)
+    print(f"Solenoid {solenoid_id} is now off.")
+    
+
+@app.route('/api/solenoid-control', methods=['POST'])
+def solenoid_control():
+    data = request.json
+    print(f"Received toggle request from frontend: {data}")
+    solenoid_id = data['solenoidId']
+    status = data['status']
+    duration = data.get('duration', 0) 
+    
+
+    solenoids = read_solenoid_states()
+    solenoids[solenoid_id] = status
+    write_solenoid_states(solenoids)
+
+    # Implement the logic to send a command to the ESP32 to change the solenoid status
+    if status:
+        print(f"Solenoid {solenoid_id} on for {duration} seconds.")
+        solenoid_status[solenoid_id] = True
+        if duration > 0:
+            # Schedule to turn off the solenoid after the duration
+            threading.Timer(duration, turn_off_solenoid, [solenoid_id]).start()
+    else:
+        print(f"Solenoid {solenoid_id} off.")
+        solenoid_status[solenoid_id] = False
+        # If stopping immediately, cancel any existing timer (if applicable) and turn off
+        
+    return jsonify({"message": "Solenoid status updated."}), 200
+
+
+@app.route('/api/start-state', methods=['POST'])
+def start_solenoid():
+    data = request.json  # Expecting a JSON payload with solenoid states
+    app.logger.info(f"Received toggle request: {data}")
+    solenoids = read_solenoid_states()
+    try:
+            for solenoid, state in data.items():
+                if solenoid in solenoids:
+                    solenoids[solenoid] = state
+                    app.logger.info(f"Toggled {solenoid} to {state}")
+                else:
+                    app.logger.error(f"Invalid solenoid ID: {solenoid}")
+                    return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
+            notify_subscribers()  # Notify all subscribers about the update
+            write_solenoid_states(solenoids)
+            return jsonify(solenoids), 200
+    except Exception as e:
+        app.logger.error(f"Error handling toggle request: {str(e)}")
+        return jsonify({"error": "Error processing request"}), 500
+
+@app.route('/api/start-status', methods=['GET'])
+def start_status():
+    app.logger.info("Received request for start states")
+    solenoids = read_solenoid_states()
+    app.logger.debug(f"Current solenoid states: {solenoids}")
+    response = make_response(jsonify(solenoids), 200)
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
+    return
+
+@app.route('/api/stop-solenoid', methods=['POST'])
+def stop_solenoid():
+    data = request.get_json()
+    solenoid_id = data.get('solenoidId')
+    if solenoid_id:
+        print(f"Stopping solenoid {solenoid_id}")
+        # This is a simplified example. You would need to implement logic to
+        # actually signal the ESP32 to stop this specific solenoid.
+        return jsonify({"success": True, "message": f"Solenoid {solenoid_id} stopped"}), 200
+    else:
+        return jsonify({"error": "Missing solenoidId parameter"}), 400
+
+stop_commands = {}
+
+@app.route('/api/stop-solenoid-status', methods=['GET'])
+def get_stop_solenoid_status():
+    # This example assumes stop_commands is a dict that holds stop commands
+    if stop_commands:
+        return jsonify(stop_commands), 200
+    return jsonify({"message": "No stop command available"}), 404
 
 def notify_subscribers():
     subscribers.append(1)  # Add a dummy value to indicate a new update

@@ -1,1 +1,1 @@
-{"solenoid1": false, "solenoid2": false, "solenoid3": false, "solenoid4": false}
+{"solenoid1": false, "solenoid2": false, "solenoid3": false, "solenoid4": false, "1": false}
