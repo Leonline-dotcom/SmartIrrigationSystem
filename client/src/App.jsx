@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './App.scss'
 import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
-import Setup from './Components/Setup/ConnectionStatus'
-import ESP32 from './Components/Examples/ESP32Example'
-import Template from './Components/Examples/Templates'
-import Zones from './Components/Zones/ZoneList'
-import Zone from './Components/Zones/Zone'
-import WaterCap from './Components/TankCapacity/WaterCap'
-import Weather from  './Components/Weather Display/Weather'
-import Interface from './Components/Examples/Interface';
+import ZoneOverview from './Components/Zones/ZoneOverview'
+import Interface from './Components/HardwareTesting/Interface';
+import Settings from './Components/Settings/Settings'
+// import WaterCap from './Components/TankCapacity/WaterCap'
+// import Weather from  './Components/Weather Display/Weather'
 import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App(){
@@ -31,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/interface',
     element: <Interface/>
+  },
+  {
+    path: '/settings',
+    element: <Settings/>
   }
   // {
   //   path: '/capacity',
