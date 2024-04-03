@@ -228,33 +228,7 @@ def esp32_status_stream():
 
     return Response(stream(), content_type='text/event-stream')
 
-scheduled_runs = {}
 
-# NOTE: DOES NOT HAVE THE FILE READING TO RUN ON AWS
-@app.route('/api/quick-run', methods=['POST'])
-def schedule_run():
-    data = request.json
-    duration = data['duration']
-    zones = data['zones']
-    print(f"Run solenoids for {duration} seconds on zones {zones}")
-    
-    scheduled_runs['run'] = {
-        'duration': duration,
-        'zones': zones,
-        'timestamp': time.time()  # Store the timestamp of when this was scheduled
-    }
-
-    return jsonify({"success": True, "message": "Command to run solenoids received"}), 200
-
-@app.route('/api/quick-run-status', methods=['GET'])
-def get_scheduled_run():
-    # Check if there's a scheduled run and return it
-    if 'run' in scheduled_runs:
-        # You might want to add logic to only send runs that are still valid based on the current time
-        return jsonify(scheduled_runs['run']), 200
-    else:
-        # No scheduled run available
-        return jsonify({"message": "No scheduled run available"}), 404
     
 solenoid_status = {}
 def turn_off_solenoid(solenoid_id):
