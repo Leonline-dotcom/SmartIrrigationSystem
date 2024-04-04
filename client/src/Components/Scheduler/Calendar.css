@@ -5,7 +5,7 @@
 
 .calendar-container .react-calendar__tile {
   width: 100% !important;
-  height: 100% !important;
+  height: 10vh !important;
 }
 
 .parent-container {
@@ -14,10 +14,7 @@
 }
 
 .popup {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
 }
 
 .add-button {
@@ -27,15 +24,19 @@
 .popup-inner {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  display: flex;
+}
+
+.action-container {
+    width: 100%;
+    height: 100%;
+    position: relative; /* Ensure contained elements are positioned relative to this container */
 }
 
 .days-container,
 .time-container,
 .duration-container {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex: 1 1 auto;
 }

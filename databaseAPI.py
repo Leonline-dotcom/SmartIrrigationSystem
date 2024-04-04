@@ -255,3 +255,17 @@ def addSchedule(username, zone, monday, tuesday, wednesday, thursday, friday, sa
             my_user.update_one({}, {"$set": update})
 
         return True
+
+
+def get_zone_schedules(username):
+    with MongoClient(dbURL, tlsCAFile=ca) as org:
+        user_db = org["Users"]
+        my_user = user_db[username]
+        zone1 = my_user.find_one({"Zone1.Status": "Active"})
+        zone2 = my_user.find_one({"Zone2.Status": "Active"})
+        zone3 = my_user.find_one({"Zone3.Status": "Active"})
+        zone4 = my_user.find_one({"Zone4.Status": "Active"})
+
+        return zone1, zone2, zone3, zone4
+
+

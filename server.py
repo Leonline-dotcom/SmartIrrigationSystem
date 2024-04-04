@@ -67,6 +67,13 @@ def schedule():
     return jsonify({"message": "Failed to add schedule"})
 
 
+@app.route("/Calendar", methods=['GET'])
+def get_schedules():
+    username = "admin"
+    return db.get_zone_schedules(username)
+
+
+
 # if __name__ == "__main__":
 #     app.run(debug=True)
 

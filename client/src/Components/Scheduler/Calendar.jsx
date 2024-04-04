@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css'
 import {Navigate} from "react-router-dom";
+import axios from 'axios'
 
 export default function Calender(){
     const [zoneData, setZoneData] = useState(
@@ -56,17 +57,30 @@ export default function Calender(){
      }
     }
 
+    useEffect(() => {
+      const fetchSolenoidStates = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/api/solenoid-states`);
+          console.log("Fetched solenoid states:", response.data);
+          setSolState(response.data);  // Update the component's state with fetched data
+        } catch (error) {
+          console.error('Error fetching solenoid states:', error);
+        }
+      };
+    }, []);
+
     return (
         <div>
             <div className="calendar-container">
                 <Calendar />
             </div>
-            <div className="popup">
+            <div className="action-container">
             {!showPopup && (
             <button className="add-button" onClick={handleAddButtonClick}>
                 Add
             </button>
             )}
+            <div className="popup">
             {showPopup && (
             <div className="popup-inner">
                 <button className="close-btn" onClick={handleClosePopup}>
@@ -113,6 +127,7 @@ export default function Calender(){
                     </form>
             </div>
             )}
+                </div>
             </div>
         </div>
     );
