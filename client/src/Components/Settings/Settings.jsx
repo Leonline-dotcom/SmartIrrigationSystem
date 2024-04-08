@@ -10,8 +10,8 @@ function Settings(){
       });
 
     //Comment out which one the test enviroment is not.
-    const API_URL = "http://10.159.66.179:5001";  //Local Host URL
-    // const API_URL = "http://oasis-flow.com";      //Website URL
+    // const API_URL = "http://10.159.64.194:5001";  //Local Host URL
+    const API_URL = "http://oasis-flow.com";      //Website URL
 
 
 
@@ -22,9 +22,22 @@ function Settings(){
           setEsp32Status(status);
         };
 
+        const batteryLevelSource = new EventSource(`${API_URL}/api/battery-level-stream`);
+        batteryLevelSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setSystemStatus(prevState => ({
+            ...prevState,
+            battery: `${data.voltage} V` // Format as needed
+        }));
+        };
+
+
         return () => {
             esp32StatusSource.close();
+            batteryLevelSource.close();
         };
+
+
 
     }, []);
     return(
@@ -36,7 +49,7 @@ function Settings(){
             <span>{esp32Status.connected ? 'Connected' : 'Disconnected'}</span>
         </div>
         <h2>Wifi Network: {esp32Status.network}</h2>
-        <h2>Battery Capacity: </h2> {/* You'll replace placeholders with actual data like you did for esp32Status */}
+        <h2>Battery Capacity: {systemStatus.battery}</h2> {/* You'll replace placeholders with actual data like you did for esp32Status */}
         <h2>Water Tank Capacity: </h2>
     </div>
     );

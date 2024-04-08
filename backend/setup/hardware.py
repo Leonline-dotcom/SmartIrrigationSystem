@@ -15,6 +15,7 @@ STATE_FILE = 'solenoid_states.txt'
 WATER_LEVEL = 'water_level.txt'
 PUMP_STATUS = 'pump_state.txt'
 ESP32_STATUS = 'esp32_status.txt'
+BATTERY_LEVEL = 'battery_level.txt'
 
 subscribers = []
 
@@ -293,62 +294,41 @@ def solenoid_control():
         
     return jsonify({"message": "Solenoid status updated."}), 200
 
-
-@app.route('/api/start-state', methods=['POST'])
-def start_solenoid():
-    data = request.json  # Expecting a JSON payload with solenoid states
-    app.logger.info(f"Received toggle request: {data}")
-    solenoids = read_solenoid_states()
-    try:
-            for solenoid, state in data.items():
-                if solenoid in solenoids:
-                    solenoids[solenoid] = state
-                    app.logger.info(f"Toggled {solenoid} to {state}")
-                else:
-                    app.logger.error(f"Invalid solenoid ID: {solenoid}")
-                    return jsonify({"error": f"Invalid solenoid ID: {solenoid}"}), 400
-            notify_subscribers()  # Notify all subscribers about the update
-            write_solenoid_states(solenoids)
-            return jsonify(solenoids), 200
-    except Exception as e:
-        app.logger.error(f"Error handling toggle request: {str(e)}")
-        return jsonify({"error": "Error processing request"}), 500
-
-@app.route('/api/start-status', methods=['GET'])
-def start_status():
-    app.logger.info("Received request for start states")
-    solenoids = read_solenoid_states()
-    app.logger.debug(f"Current solenoid states: {solenoids}")
-    response = make_response(jsonify(solenoids), 200)
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
-    return
-
-@app.route('/api/stop-solenoid', methods=['POST'])
-def stop_solenoid():
+@app.route('/api/update-battery-level', methods=['POST'])
+def update_battery_level():
     data = request.get_json()
-    solenoid_id = data.get('solenoidId')
-    if solenoid_id:
-        print(f"Stopping solenoid {solenoid_id}")
-        # This is a simplified example. You would need to implement logic to
-        # actually signal the ESP32 to stop this specific solenoid.
-        return jsonify({"success": True, "message": f"Solenoid {solenoid_id} stopped"}), 200
-    else:
-        return jsonify({"error": "Missing solenoidId parameter"}), 400
+    battery_voltage = data.get('voltage')
+    with open(BATTERY_LEVEL, 'w') as file:
+        json.dump({'voltage': battery_voltage}, file)
+    return jsonify({"success": True}), 200
 
-stop_commands = {}
 
-@app.route('/api/stop-solenoid-status', methods=['GET'])
-def get_stop_solenoid_status():
-    # This example assumes stop_commands is a dict that holds stop commands
-    if stop_commands:
-        return jsonify(stop_commands), 200
-    return jsonify({"message": "No stop command available"}), 404
+@app.route('/api/battery-level-stream')
+def battery_level_stream():
+    def stream():
+        old_data = None
+        while True:
+            try:
+                with open(BATTERY_LEVEL, 'r') as file:
+                    current_data = json.load(file)
+                    if current_data != old_data:
+                        yield f"data: {json.dumps(current_data)}\n\n"
+                        old_data = current_data
+            except FileNotFoundError:
+                yield "data: {}\n\n"
+            time.sleep(1)  # Adjust timing as needed
+
+    return Response(stream(), content_type='text/event-stream')
+
+
+
+def update_battery_level():
+    notify_subscribers()  # Notify all subscribers about the update
+    return jsonify({"success": True}), 200
 
 def notify_subscribers():
     subscribers.append(1)  # Add a dummy value to indicate a new update
     app.logger.info("Notified subscribers")
-
 
 @app.errorhandler(Exception)
 def handle_exception(e):
