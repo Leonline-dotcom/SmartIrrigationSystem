@@ -98,6 +98,24 @@ img, video{
     background-color:var(--paleGreen);
 }
 
+.sidebar-menu-item {
+    display: block;
+    width: 100%;
+    color: inherit; // Ensures text color doesn't change on visit
+    &:hover {
+      background-color: #165a9c; // Adjust as needed
+    }
+  }
+  
+  // Resetting visited link color
+  a:visited {
+    color: inherit;
+  }
+  
+  
+  
+
+
 //Styling for Pages
 
 .loginPage, .registerPage{
