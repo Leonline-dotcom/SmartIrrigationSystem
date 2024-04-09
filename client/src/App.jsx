@@ -40,6 +40,13 @@ function SidebarComponent(){
     </Sidebar>
   );
 }
+// import Setup from './Components/Setup/ConnectionStatus'
+// import ESP32 from './Components/Examples/ESP32Example'
+// import Template from './Components/Examples/Templates'
+// import Zones from './Components/Zones/ZoneList'
+import WaterCap from './Components/TankCapacity/WaterCap'
+import Weather from  './Components/Weather Display/Weather'
+import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App(){
   return (
