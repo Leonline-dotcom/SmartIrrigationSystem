@@ -94,8 +94,10 @@ def remove_day():
     username = "admin4"
     zone = creds.get('zone')
     day = creds.get('day')
-    success = db.remove_scheduled_day(username, zone, day)
-    print(success)
+    more_days = db.remove_scheduled_day(username, zone, day)
+    if more_days == False:
+        db.remove_zone_status(username, zone)
+    print(more_days)
     return jsonify({"message": "Successfully removed scheduled zone day"})
 
 

@@ -271,6 +271,8 @@ def update_zone_status(username, zone):
             my_user.update_one({}, {"$set": {update: True}})
         if zone == "Zone 4":
             my_user.update_one({}, {"$set": {update: True}})
+        
+        return
 
 
 def update_grid_zone_status(username):
@@ -310,5 +312,35 @@ def remove_scheduled_day(username, zone, day):
         update = "Grid." + zone + ".Schedule.Day." + day
         my_user.update_one({}, {"$set": {update + ".Time": "", update + ".Duration": ""}})
 
-        return "Successfully updated scheduling in database"
+        # Return true/false based on whether there are scheduled days for the respective zone
+        return has_scheduled_days(my_user, zone)
+        # return "Successfully updated scheduling in database"
+    
+
+def has_scheduled_days(my_user, zone):
+    with MongoClient(dbURL, tlsCAFile=ca) as org:
+        # Access the Schedule data for the specified zone
+        schedule_data = my_user.find_one({}, {"Grid." + zone + ".Schedule.Day": 1})
+
+        if schedule_data and "Grid" in schedule_data and zone in schedule_data["Grid"]:
+            # Extract the Schedule data for the specified zone
+            zone_schedule = schedule_data["Grid"][zone]["Schedule"]["Day"]
+
+            # Iterate over the days and check if any have scheduled time and duration
+            for day_data in zone_schedule.values():
+                if day_data["Time"] and day_data["Duration"]:
+                    return True
+
+        # No scheduled days found for the zone
+        return False
+
+
+def remove_zone_status(username, zone):
+    with MongoClient(dbURL, tlsCAFile=ca) as org:
+        user_db = org["Users"]
+        my_user = user_db[username]
+        update = "Grid." + zone + ".Status"
+        my_user.update_one({}, {"$set": {update: False}})
+        
+        return
 

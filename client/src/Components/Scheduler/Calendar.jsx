@@ -143,12 +143,14 @@ export default function CalendarPage() {
                     </div>
                 )}
 
-                {/* Render zone data */}
-                <div className="zone-data">
-                    <h2>Active Zones</h2>
+            </div>
+            {/* Render zone data */}
+            <div className="zone-data">
+                <h2>Active Zones</h2>
+                <div className="zones-container">
                     {Object.entries(zoneStatus).map(([zone, data]) => (
                         <div key={zone} className="zone-item">
-                            {data.Status && (
+                            {data.Status ? (
                                 <>
                                     <h3>{zone}</h3>
                                     <div className="zone-details">
@@ -170,11 +172,15 @@ export default function CalendarPage() {
                                         ))}
                                     </div>
                                 </>
+                            ) : (
+                                <>
+                                    <h3>{zone}</h3>
+                                    <p>Not currently scheduled</p>
+                                </>
                             )}
                         </div>
                     ))}
                 </div>
-
             </div>
         </div>
     );
