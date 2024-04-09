@@ -8,8 +8,13 @@ import Register from './Components/Register/Register'
 import ZoneOverview from './Components/Zones/ZoneOverview'
 import Interface from './Components/HardwareTesting/Interface';
 import Settings from './Components/Settings/Settings'
-// import WaterCap from './Components/TankCapacity/WaterCap'
-// import Weather from  './Components/Weather Display/Weather'
+import WaterCap from './Components/TankCapacity/WaterCap'
+import Weather from  './Components/Weather Display/Weather'
+// import Setup from './Components/Setup/ConnectionStatus'
+// import ESP32 from './Components/Examples/ESP32Example'
+// import Template from './Components/Examples/Templates'
+// import Zones from './Components/Zones/ZoneList'
+import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 
 function SidebarComponent(){
@@ -40,13 +45,6 @@ function SidebarComponent(){
     </Sidebar>
   );
 }
-// import Setup from './Components/Setup/ConnectionStatus'
-// import ESP32 from './Components/Examples/ESP32Example'
-// import Template from './Components/Examples/Templates'
-// import Zones from './Components/Zones/ZoneList'
-import WaterCap from './Components/TankCapacity/WaterCap'
-import Weather from  './Components/Weather Display/Weather'
-import {createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App(){
   return (
@@ -60,6 +58,8 @@ function App(){
           <Route path="/zones" element={<ZoneOverview />} />
           <Route path="/interface" element={<Interface />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/weather" element={<Weather />} />
+          <Route path="/cap" element={<WaterCap />} />
           {/* Additional routes can be added here */}
         </Routes>
       </main>
