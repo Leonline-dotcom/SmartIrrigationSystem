@@ -1,42 +1,122 @@
-.calendar-container .react-calendar{
-    height: 100% !important;
-    width: 100% !important;
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.calendar-container .react-calendar__tile {
-  width: 100% !important;
-  height: 10vh !important;
-}
-
-.parent-container {
-  width: 100%;
-  height: 100%;
-}
-
-.popup {
-
+.calendar-container {
+  margin-bottom: 20px;
 }
 
 .add-button {
-  width: 100%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }
 
 .popup-inner {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  display: flex;
+  max-width: 400px;
 }
 
-.action-container {
-    width: 100%;
-    height: 100%;
-    position: relative; /* Ensure contained elements are positioned relative to this container */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.days-container,
-.time-container,
-.duration-container {
-  flex: 1 1 auto;
+.popup h2 {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type='submit'] {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type='submit']:hover {
+  background-color: #218838;
+}
+
+.zone-data {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.zone-item {
+  margin-bottom: 20px;
+}
+
+.zone-item h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.zone-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.zone-detail {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.detail-label {
+  font-weight: bold;
+}
+
+.detail-value {
+  color: #555;
 }

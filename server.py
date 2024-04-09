@@ -1,6 +1,7 @@
 import databaseAPI as db
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import sys
 
 app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": "http://localhost:5173", "methods": ["POST"]}})
@@ -51,7 +52,7 @@ def signUp():
 def schedule():
     creds = request.json
     #username = creds.get('username')
-    username = "admin"
+    username = "admin4"
     zone = creds.get('zone')
     monday = creds.get('monday')
     tuesday = creds.get('tuesday')
@@ -63,14 +64,28 @@ def schedule():
     time = creds.get('time')
     duration = creds.get('duration')
     if db.addSchedule(username, zone, monday, tuesday, wednesday, thursday, friday, saturday, sunday, time, duration):
+        db.update_zone_status(username, zone)
+        db.update_grid_zone_status(username)
         return jsonify({"message": "Successfully added schedule"})
     return jsonify({"message": "Failed to add schedule"})
 
 
 @app.route("/Calendar", methods=['GET'])
 def get_schedules():
-    username = "admin"
-    return db.get_zone_schedules(username)
+    username = "admin4"
+    zone1, zone2, zone3, zone4 = db.get_zone_schedules(username)
+    # # Convert ObjectId to string
+    # if zone1:
+    #     zone1["_id"] = str(zone1["_id"])
+    # if zone2:
+    #     zone2["_id"] = str(zone2["_id"])
+    # if zone3:
+    #     zone3["_id"] = str(zone3["_id"])
+    # if zone4:
+    #     zone4["_id"] = str(zone4["_id"])
+
+    print({"Zone 1": zone1, "Zone 2": zone2, "Zone 3": zone3, "Zone 4": zone4})
+    return jsonify({"Zone 1": zone1, "Zone 2": zone2, "Zone 3": zone3, "Zone 4": zone4})
 
 
 

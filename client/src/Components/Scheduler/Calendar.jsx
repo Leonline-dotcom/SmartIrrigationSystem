@@ -1,26 +1,27 @@
-import React, {useEffect, useState} from 'react'
-import Calendar from 'react-calendar'
+import React, { useEffect, useState } from 'react';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './Calendar.css'
-import {Navigate} from "react-router-dom";
-import axios from 'axios'
+import './Calendar.css';
+import axios from 'axios';
 
-export default function Calender(){
-    const [zoneData, setZoneData] = useState(
-        { zone: "Zone 1",
+export default function CalendarPage() {
+    const [zoneData, setZoneData] = useState({
+        zone: "Zone 1",
         monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false,
         time: "",
-        duration: ""}
-    )
+        duration: ""
+    });
+
+    const [zoneStatus, setZoneStatus] = useState({
+        Zone1: {}, Zone2: {}, Zone3: {}, Zone4: {}
+    });
 
     function handleChange(event) {
-        const {name, value, type, checked} = event.target
-        setZoneData(prevZoneData => {
-            return {
-                ...prevZoneData,
-                [name]: type === "checkbox" ? checked : value
-            }
-        })
+        const { name, value, type, checked } = event.target;
+        setZoneData(prevZoneData => ({
+            ...prevZoneData,
+            [name]: type === "checkbox" ? checked : value
+        }));
     }
 
     const [showPopup, setShowPopup] = useState(false);
@@ -34,61 +35,57 @@ export default function Calender(){
     };
 
     function handleSubmit(event) {
-        event.preventDefault()
+        event.preventDefault();
         fetch("http://localhost:5001/Calendar", {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(zoneData)
-        }).then(
-            res => res.json()
-        ).then(
-         data => {
-           setZoneData(prevUserData => {
-               return {
-                    ...prevUserData,
+        }).then(res => res.json())
+            .then(data => {
+                setZoneData(prevZoneData => ({
+                    ...prevZoneData,
                     [zoneData.found]: data.found
-               }
-            })
-           console.log(data)
-         }
-     )
-     if (zoneData.found) {
-         Navigate({to: '/Calendar'})
-     }
+                }));
+                console.log(data);
+                fetchZoneStatus(); // Fetch updated zone data after adding a schedule
+            });
+        if (zoneData.found) {
+            Navigate({ to: '/Calendar' });
+        }
     }
 
     useEffect(() => {
-      const fetchSolenoidStates = async () => {
-        try {
-          const response = await axios.get(`${API_URL}/api/solenoid-states`);
-          console.log("Fetched solenoid states:", response.data);
-          setSolState(response.data);  // Update the component's state with fetched data
-        } catch (error) {
-          console.error('Error fetching solenoid states:', error);
-        }
-      };
+        fetchZoneStatus();
     }, []);
 
+    const fetchZoneStatus = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5001/Calendar`);
+            console.log("Fetched zone status:", response.data);
+            setZoneStatus(response.data);
+        } catch (error) {
+            console.error('Error fetching zone states:', error);
+        }
+    };
+
     return (
-        <div>
+        <div className="calendar-page">
             <div className="calendar-container">
                 <Calendar />
             </div>
             <div className="action-container">
-            {!showPopup && (
-            <button className="add-button" onClick={handleAddButtonClick}>
-                Add
-            </button>
-            )}
-            <div className="popup">
-            {showPopup && (
-            <div className="popup-inner">
-                <button className="close-btn" onClick={handleClosePopup}>
-                    Close
+                <button className="add-button" onClick={handleAddButtonClick}>
+                    Add Schedule
                 </button>
-                <h2>Schedule Zone</h2>
-                <form onSubmit={handleSubmit}>
-                <label htmlFor="zone">Select Zone:</label>
+                {showPopup && (
+                    <div className="popup">
+                        <div className="popup-inner">
+                            <button className="close-btn" onClick={handleClosePopup}>
+                                Close
+                            </button>
+                            <h2>Schedule Zone</h2>
+                            <form onSubmit={handleSubmit}>
+              <label htmlFor="zone">Select Zone:</label>
                 <select id="zone" name="zone" onChange={handleChange} value={zoneData.zone}>
                     <option value="Zone 1">Zone 1</option>
                     <option value="Zone 2">Zone 2</option>
@@ -124,10 +121,37 @@ export default function Calender(){
                     <button>
                         <span>Submit</span>
                     </button>
-                    </form>
+              </form>
+                        </div>
+                    </div>
+                )}
+                {/* Render zone data */}
+                {/* Render zone data */}
+            <div className="zone-data">
+                <h2>Active Zones</h2>
+                {Object.entries(zoneStatus).map(([zone, data]) => (
+                    <div key={zone} className="zone-item">
+                        {data.Status && (
+                            <>
+                                <h3>{zone}</h3>
+                                <div className="zone-details">
+                                    {Object.entries(data.Schedule.Day).map(([day, schedule]) => (
+                                        schedule.Time !== "" && schedule.Duration !== "" && (
+                                            <div key={day} className="zone-detail">
+                                                <span className="detail-label">{day}:</span>
+                                                <span className="detail-value">
+                                                    Time: {schedule.Time}, Duration: {schedule.Duration}
+                                                </span>
+                                            </div>
+                                        )
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
             </div>
-            )}
-                </div>
+
             </div>
         </div>
     );
