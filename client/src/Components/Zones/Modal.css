@@ -15,26 +15,61 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  width: auto;
+  min-width: 70%;
   max-width: 95%; 
-  min-width: 60%;
+  min-height: 80%;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: center; 
+  align-items: center;
 }
 
-.modal-header, .modal-footer {
-  width: 100%; /* Full width */
+.zone-details {
+  text-align: left;
+}
+
+.quick-run {
   text-align: center;
+  width: 100%;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.duration-inputs label {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.duration-inputs input {
+  width: 50px;
+  padding: 5px;
+  text-align: center;
+  margin: 0 5px;
 }
 
 .modal-body {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 20px;
+  width: 100%;
+}
+
+.modal-header {
+  width: 100%;
+  text-align: center;
+}
+
+.modal-footer {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: flex-end; 
+  padding: 10px; 
 }
 
 .modal-content img {
@@ -49,10 +84,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 45%; /* Match image width for balance */
+  gap: 20px;
 }
 
-.modal-content h2, .modal-content p, .timer-container p {
+.modal-content h1, .modal-content p, .timer-container p {
   color: #333;
   margin: 5px 0; /* Consistent margin for all text */
+}
+
+.button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+  align-self: center;
 }

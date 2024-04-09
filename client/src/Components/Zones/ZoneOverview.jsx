@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Zones.css';
-import ZonePopup from './ZonePopup'; // Popup for displaying zone details
+import ZonePopup from './ZonePopup'; 
 import zone1Image from './Assets/Zone1.jpg';
 import zone2Image from './Assets/Zone2.jpg';
 import zone3Image from './Assets/Zone3.jpg';

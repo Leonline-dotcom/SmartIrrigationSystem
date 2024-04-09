@@ -72,7 +72,7 @@ function Interface(){
       };
     }, []);
 
-    const togglePump = async () => { // New function for toggling the pump
+    const togglePump = async () => { 
       const updatedPumpStatus = !pumpStatus
       console.log("Toggling pump status to:", updatedPumpStatus);
       try {

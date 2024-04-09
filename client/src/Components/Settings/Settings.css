@@ -1,0 +1,13 @@
+.settings .status-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block; /* Align with text */
+    margin-right: 10px; /* Space between indicator and text */
+}
+
+.settings .connection-status {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between elements */
+}
