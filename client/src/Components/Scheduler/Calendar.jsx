@@ -34,6 +34,23 @@ export default function CalendarPage() {
         setShowPopup(false);
     };
 
+    const handleRemoveDay = (zone, day) => {
+        // Implement removal logic here
+        console.log("Remove day", zone, day);
+        fetch("http://localhost:5001/remove_day", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({zone, day})
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data);
+                fetchZoneStatus(); // Fetch updated zone data after removing a schedule
+            });
+        if (zoneData.found) {
+            Navigate({ to: '/Calendar' });
+        }
+    };
+
     function handleSubmit(event) {
         event.preventDefault();
         fetch("http://localhost:5001/Calendar", {
@@ -125,32 +142,38 @@ export default function CalendarPage() {
                         </div>
                     </div>
                 )}
+
                 {/* Render zone data */}
-                {/* Render zone data */}
-            <div className="zone-data">
-                <h2>Active Zones</h2>
-                {Object.entries(zoneStatus).map(([zone, data]) => (
-                    <div key={zone} className="zone-item">
-                        {data.Status && (
-                            <>
-                                <h3>{zone}</h3>
-                                <div className="zone-details">
-                                    {Object.entries(data.Schedule.Day).map(([day, schedule]) => (
-                                        schedule.Time !== "" && schedule.Duration !== "" && (
-                                            <div key={day} className="zone-detail">
-                                                <span className="detail-label">{day}:</span>
-                                                <span className="detail-value">
-                                                    Time: {schedule.Time}, Duration: {schedule.Duration}
-                                                </span>
-                                            </div>
-                                        )
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                    </div>
-                ))}
-            </div>
+                <div className="zone-data">
+                    <h2>Active Zones</h2>
+                    {Object.entries(zoneStatus).map(([zone, data]) => (
+                        <div key={zone} className="zone-item">
+                            {data.Status && (
+                                <>
+                                    <h3>{zone}</h3>
+                                    <div className="zone-details">
+                                        {Object.entries(data.Schedule.Day).map(([day, schedule]) => (
+                                            schedule.Time !== "" && schedule.Duration !== "" && (
+                                                <div key={day} className="zone-detail">
+                                                    <span className="detail-label">{day}: </span>
+                                                    <span className="detail-value">
+                                                        Time: {schedule.Time}, Duration: {schedule.Duration}
+                                                        <button
+                                                            className="remove-button"
+                                                            onClick={() => handleRemoveDay(zone, day)}
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            )
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
 
             </div>
         </div>

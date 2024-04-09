@@ -300,4 +300,15 @@ def get_zone_schedules(username):
         zone4_data = zone4['Grid']['Zone 4'] if zone4 else {}
 
         return zone1_data, zone2_data, zone3_data, zone4_data
+    
+
+def remove_scheduled_day(username, zone, day):
+    with MongoClient(dbURL, tlsCAFile=ca) as org:
+        user_db = org["Users"]
+        my_user = user_db[username]
+    
+        update = "Grid." + zone + ".Schedule.Day." + day
+        my_user.update_one({}, {"$set": {update + ".Time": "", update + ".Duration": ""}})
+
+        return "Successfully updated scheduling in database"
 

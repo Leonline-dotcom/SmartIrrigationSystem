@@ -88,6 +88,16 @@ def get_schedules():
     return jsonify({"Zone 1": zone1, "Zone 2": zone2, "Zone 3": zone3, "Zone 4": zone4})
 
 
+@app.route("/remove_day", methods=['POST'])
+def remove_day():
+    creds = request.json
+    username = "admin4"
+    zone = creds.get('zone')
+    day = creds.get('day')
+    success = db.remove_scheduled_day(username, zone, day)
+    print(success)
+    return jsonify({"message": "Successfully removed scheduled zone day"})
+
 
 # if __name__ == "__main__":
 #     app.run(debug=True)
