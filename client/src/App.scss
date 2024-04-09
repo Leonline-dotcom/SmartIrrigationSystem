@@ -98,13 +98,25 @@ img, video{
     background-color:var(--paleGreen);
 }
 
+
+.sidebar-menu-item, .pro-sidebar {
+    user-select: none;
+}
+
 .sidebar-menu-item {
-    display: block;
+    display: flex;
+    align-items: center;
     width: 100%;
     color: inherit; // Ensures text color doesn't change on visit
+    text-decoration: none;
     &:hover {
       background-color: #165a9c; // Adjust as needed
     }
+  }
+
+  .Menu, .MenuItem {
+    user-select: none;
+    cursor: pointer;
   }
   
   // Resetting visited link color
