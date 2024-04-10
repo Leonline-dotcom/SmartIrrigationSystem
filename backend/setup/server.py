@@ -2,6 +2,9 @@ import databaseAPI as db
 from flask import Blueprint, Flask, request, jsonify
 from flask_cors import CORS
 import socket
+from pymongo import MongoClient
+import certifi
+dbURL = "mongodb+srv://leon:36uWjhORYtUi9Oif@cluster0.uaokiyz.mongodb.net/?retryWrites=true&w=majority"
 
 server_blueprint = Blueprint('server_blueprint', __name__)
 #app = Flask(__name__)
@@ -100,6 +103,17 @@ def remove_day():
         db.remove_zone_status(username, zone)
     print(more_days)
     return jsonify({"message": "Successfully removed scheduled zone day"})
+
+# @server_blueprint.route("/api/get-schedules", methods=['GET'])
+# def get_all_schedules():
+#     # This function should query your database for all schedules
+#     schedules = db.retrieve_all_schedules()  # Placeholder for actual DB call
+#     return jsonify(schedules)
+
+
+
+
+
 
 
 # if __name__ == "__main__":

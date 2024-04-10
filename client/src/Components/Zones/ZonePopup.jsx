@@ -51,7 +51,7 @@ function ZonePopup({ zone, onClose }) {
     };
 
 
-    const [moistureLevel, setMoistureLevel] = useState("Loading...");
+    const [moistureLevel, setMoistureLevel] = useState("Dry");
 
     useEffect(() => {
         const eventSource = new EventSource(`${API_URL}/api/moisture-level-stream`);
