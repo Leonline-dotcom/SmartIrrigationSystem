@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 import axios from 'axios';
-
- const API_URL = "http://localhost:5001";  //Local Host URL
-//const API_URL = "http://oasis-flow.com";      //Website URL
+import { ApiUrlContext } from '../../App.jsx'
 
 export default function CalendarPage() {
+    const API_URL = useContext(ApiUrlContext);
+
     const [zoneData, setZoneData] = useState({
         zone: "Zone 1",
         monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false,

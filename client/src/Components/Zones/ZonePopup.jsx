@@ -1,16 +1,13 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import './Modal.css'; 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { duration } from '@mui/material';
-
-
-//Comment out which one the test enviroment is not.
-// const API_URL = "http://10.159.64.187:5001";  //Local Host URL
-const API_URL = "http://oasis-flow.com";      //Website URL
-
+import { ApiUrlContext } from '../../App.jsx'
 
 function ZonePopup({ zone, onClose }) {
+    const API_URL = useContext(ApiUrlContext);
+
     const [isTimerPlaying, setIsTimerPlaying] = useState(false);
     const [inputValues, setInputValues] = useState({ hours: '', minutes: '', seconds: '' });
     const [timerDuration, setTimerDuration] = useState({ hours: 0, minutes: 0, seconds: 0 });

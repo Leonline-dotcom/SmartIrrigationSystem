@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 import { BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
 import { Sidebar, Menu, MenuItem,} from 'react-pro-sidebar';
 import { FaList, FaThLarge, FaCog, FaCalendarAlt, FaCloudSun } from 'react-icons/fa';
@@ -12,6 +12,9 @@ import Settings from './Components/Settings/Settings'
 // import WaterCap from './Components/TankCapacity/WaterCap'
 import Weather from  './Components/Weather Display/Weather'
 import CalendarPage from './Components/Scheduler/Calendar';
+
+// Create a context for API_URL
+export const ApiUrlContext = createContext();
 
 function NavLinkMenuItem({ to, icon, label, collapsed }) {
   const navigate = useNavigate();
@@ -67,24 +70,30 @@ function SidebarComponent(){
 
 
 function App(){
+  const apiUrl = "http://localhost:5001";  //Local Host URL
+  //const apiUrl = "http://oasis-flow.com";      //Website URL
+
   return (
-  <BrowserRouter>
-    <div className="App" style={{ display: 'flex', height: '100vh'  }}>
-      <SidebarComponent />
-      <main style={{ flex: 1, padding: '10px' }}>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/zones" element={<ZoneOverview />} />
-          <Route path="/interface" element={<Interface />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/weather" element={<Weather />} />
-          <Route path="/Calendar" element={<CalendarPage />} />
-          {/* Additional routes can be added here */}
-        </Routes>
-      </main>
-    </div>
+    <BrowserRouter>
+    {/* Provide the API_URL context value */}
+    <ApiUrlContext.Provider value={apiUrl}>
+      <div className="App" style={{ display: 'flex', height: '100vh' }}>
+        <SidebarComponent />
+        <main style={{ flex: 1, padding: '10px' }}>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/zones" element={<ZoneOverview />} />
+            <Route path="/interface" element={<Interface />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/weather" element={<Weather />} />
+            <Route path="/Calendar" element={<CalendarPage />} />
+            {/* Additional routes can be added here */}
+          </Routes>
+        </main>
+      </div>
+    </ApiUrlContext.Provider>
   </BrowserRouter>
 );
 }

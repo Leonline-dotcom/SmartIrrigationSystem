@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import './Login.scss'
 import '../../App.scss'
 import {Link, Navigate} from 'react-router-dom'
@@ -11,11 +11,11 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 // Import Assets
 import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
-
-// const API_URL = "http://10.159.64.187:5001";  //Local Host URL
-const API_URL = "http://oasis-flow.com";      //Website URL
+import { ApiUrlContext } from '../../App.jsx'
 
 export default function Login() {
+  const API_URL = useContext(ApiUrlContext);
+
   const [userData, setUserData] = useState(
     {username: "", password: "", found: false}
   )
