@@ -10,14 +10,27 @@ const API_URL = "http://10.159.66.192:5001";  //Local Host URL
 // const API_URL = "http://oasis-flow.com";      //Website URL
 
 
-function ZonePopup({ zone, onClose }) {
-    const [isTimerPlaying, setIsTimerPlaying] = useState(false);
+function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
+    const [isTimerPlaying, setIsTimerPlaying] = useState(remainingTime > 0);
     const [inputValues, setInputValues] = useState({ hours: '', minutes: '', seconds: '' });
     const [timerDuration, setTimerDuration] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [timerKey, setTimerKey] = useState(0);
 
     // const totalDurationInSeconds = () => timerDuration.hours * 3600 + timerDuration.minutes * 60 + timerDuration.seconds;
-    
+
+    useEffect(() => {
+        if (remainingTime > 0) {
+            setIsTimerPlaying(true);
+        } else {
+            setIsTimerPlaying(false);
+        }
+    }, [remainingTime]);
+
+    const handleTimerComplete = () => {
+        updateZoneTimer(zone.id, 0); // Reset the timer for this zone
+        setIsTimerPlaying(false);
+      };
+
     const totalDurationInSeconds = () => {
         const hoursInSeconds = parseInt(inputValues.hours || 0) * 3600;
         const minutesInSeconds = parseInt(inputValues.minutes || 0) * 60;
@@ -51,7 +64,7 @@ function ZonePopup({ zone, onClose }) {
     };
 
     const runZone = async () => {
-        // const durationInSeconds = totalDurationInSeconds();
+        const durationInSeconds = totalDurationInSeconds();
         setIsTimerPlaying(true);
         // setTimerKey(prevKey => prevKey +1);
         try {
@@ -61,12 +74,14 @@ function ZonePopup({ zone, onClose }) {
                 duration: durationInSeconds
             });
             console.log('Solenoid is running!', response.data);
+            updateZoneTimer(zone.id, durationInSeconds());
         } catch (error) {
             console.error('Run: Error starting solenoid:', error);
             // alert('Failed to start solenoid.');
             setIsTimerPlaying(false);
         }
         // handleReset();
+        
     };
 
     const stopZone = async () => {
@@ -82,6 +97,7 @@ function ZonePopup({ zone, onClose }) {
         } finally {
             handleReset();
         }
+        updateZoneTimer(zone.id, )
     };
 
     const durationInSeconds = totalDurationInSeconds();

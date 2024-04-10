@@ -1,14 +1,15 @@
-from flask import Flask, jsonify
-from flask import Flask, request, Response, jsonify, make_response, stream_with_context
-from flask_cors import CORS
+from flask import Blueprint, jsonify, request
 import requests
-import socket
 
-app = Flask(__name__)
-CORS(app)
+# Create a Blueprint for weather endpoints
+weather_blueprint = Blueprint('weather', __name__)
 
-@app.route('/api/weather')
-def get_weathero():
+@weather_blueprint.route('/')
+def index():
+    return "This is an example app"
+
+@weather_blueprint.route('/weather')
+def get_weather():
     weather_data = {
         'city': 'Austin',
         'temperature': 75,
@@ -16,13 +17,8 @@ def get_weathero():
     }
     return jsonify(weather_data)
 
-
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
-
-@app.route('/weatherinfo')
-def get_weather():
+@weather_blueprint.route('/weatherinfo')
+def get_weather_info():
     api_key = 'f94e0e45d1c9451df5f703dccc819650'
     city = 'Austin'
     url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=imperial'
@@ -30,11 +26,5 @@ def get_weather():
     if response.status_code == 200:
         return response.json()
     else:
-        return jsonify({'error': 'Failed to fetch Da data'})
-    
-if __name__ == '__main__':
-    hostname = socket.gethostname()
-    local_ip = socket.gethostbyname(hostname)
-    print(f"Flask server can be reached at: {local_ip}:5001")
-    app.run(host='0.0.0.0', port=5001, threaded=True) # Run in 5001 for localhost
-    app.debug = True
+        return jsonify({'error': 'Failed to fetch weather data'})
+

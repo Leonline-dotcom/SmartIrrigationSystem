@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import './Weather.css';
-const url ="http://10.145.229.146:5001";
+const url ="http://10.159.66.192:5001";
 
 
 
@@ -18,11 +18,16 @@ const Weather = () => {
         const data = await response.data;
         setWeatherData(data);
       } catch (error) {
+        console.log(`${url}/weatherinfo`)
         console.error('Error fetching weather data mate:', error);
       }
     }
 
-    fetchWeatherData();
+    fetchWeatherData(); // inital render
+
+    const intervalId = setInterval(fetchWeatherData, 60 * 1000); // Fetch data every 1 minute
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   return (

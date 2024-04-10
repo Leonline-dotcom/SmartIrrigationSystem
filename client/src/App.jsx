@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
 import { Sidebar, Menu, MenuItem,} from 'react-pro-sidebar';
-import { FaList, FaThLarge, FaCog, FaCalendarAlt } from 'react-icons/fa';
+import { FaList, FaThLarge, FaCog, FaCalendarAlt, FaCloudSun } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './App.scss'
 import Login from './Components/Login/Login'
@@ -59,6 +59,7 @@ function SidebarComponent(){
         <NavLinkMenuItem to="/zones" icon={<FaThLarge />} label="Zones" collapsed={collapsed}/>
         <NavLinkMenuItem to="/Calendar" icon={<FaCalendarAlt />} label="Calendar" collapsed={collapsed}/>
         <NavLinkMenuItem to="/settings" icon={<FaCog />} label="Settings" collapsed={collapsed}/>
+        <NavLinkMenuItem to="/weather" icon={<FaCloudSun />} label="Weather" collapsed={collapsed}/>
       </Menu>
     </Sidebar>
   );
@@ -73,6 +74,7 @@ function App(){
       <main style={{ flex: 1, padding: '10px' }}>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/zones" element={<ZoneOverview />} />
           <Route path="/interface" element={<Interface />} />

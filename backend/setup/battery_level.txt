@@ -1,1 +1,1 @@
-{"voltage": 0}
+{"batterySOC": 0}
