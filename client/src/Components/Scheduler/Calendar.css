@@ -236,3 +236,6 @@ select {
   color: orange; /* Example color for Zone 4 */
 }
 
+.calendar-zone-boxes {
+  flex-direction: row;
+}

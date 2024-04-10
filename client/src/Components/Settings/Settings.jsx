@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Settings.css';
 import axios from 'axios';
+import { ApiUrlContext } from '../../App.jsx'
 
 function Settings() {
+    const API_URL = useContext(ApiUrlContext);
+
     const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
     const [systemStatus, setSystemStatus] = useState({
-        battery: "Placeholder",
+        battery: "100",
         waterLevel: "Placeholder"
     });
-
-    //Comment out which one the test enviroment is not.
-    // const API_URL = "http://localhost:5001";  //Local Host URL
-    const API_URL = "http://oasis-flow.com";      //Website URL
-
-
 
     useEffect(() => {
         const initiateSSE = (url, onMessage) => {
@@ -72,13 +69,13 @@ function Settings() {
                 <span className="data-value">{esp32Status.network}</span>
             </div>
             <div className="data-container">
-                <h2 className="data-heading">Battery Capacity:</h2>
+                <h2 className="data-heading">Battery Capacity %:</h2>
                 <span className="data-value">{systemStatus.battery}</span>
             </div>
-            <div className="data-container">
+            {/* <div className="data-container">
                 <h2 className="data-heading">Water Tank Capacity:</h2>
                 <span className="data-value">{systemStatus.waterLevel}</span>
-            </div>
+            </div> */}
         </div>
     );
 }

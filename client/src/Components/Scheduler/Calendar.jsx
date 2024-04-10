@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 import axios from 'axios';
-
-//  const API_URL = "http://localhost:5001";  //Local Host URL
-const API_URL = "http://oasis-flow.com";      //Website URL
+import { ApiUrlContext } from '../../App.jsx'
 
 export default function CalendarPage() {
+    const API_URL = useContext(ApiUrlContext);
+
     const [zoneData, setZoneData] = useState({
         zone: "Zone 1",
         monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false,
@@ -88,10 +88,49 @@ export default function CalendarPage() {
         }
     };
 
+    const renderTileContent = ({ date, view }) => {
+        if (view === 'month') {
+            const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+            const zoneColors = {
+                'Zone 1': 'blue',
+                'Zone 2': 'red',
+                'Zone 3': 'green',
+                'Zone 4': 'orange'
+            };
+    
+            // Collect all scheduled zones for the day
+            const scheduledZones = Object.entries(zoneStatus)
+                .filter(([zone, data]) => 
+                    data.Status && 
+                    data.Schedule.Day[day] && 
+                    data.Schedule.Day[day].Time !== "" && 
+                    data.Schedule.Day[day].Duration !== ""
+                )
+                .map(([zone]) => (
+                    <div key={`${zone}-${day}`} style={{ color: zoneColors[zone], fontSize: '0.7em', marginRight: '5px' }}>■</div>
+                ));
+    
+            // If there are scheduled zones, return a div containing all the colored boxes
+            if (scheduledZones.length > 0) {
+                return (
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>{scheduledZones}</div>
+                    </div>
+                );
+            }
+        }
+        return null;
+    };
+    
+    
+
     return (
         <div className="calendar-page">
             <div className="calendar-container">
-                <Calendar style={{ flexGrow: 1 }} />
+                <Calendar
+                    style={{ flexGrow: 1 }}
+                    tileContent={renderTileContent}
+                />
             </div>
             <div className="zone-data">
                 <div className="active-zones-container">

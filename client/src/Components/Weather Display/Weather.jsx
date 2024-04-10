@@ -1,14 +1,11 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import './Weather.css';
-// const url ="http://localhost:5001";
-const url = "http://oasis-flow.com";      //Website URL
-
-
-
-
+import { ApiUrlContext } from '../../App.jsx'
 
 const Weather = () => {
+  const url = useContext(ApiUrlContext);
+  
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {

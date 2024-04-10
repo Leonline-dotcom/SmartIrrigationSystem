@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import './Interface.css';  // Assume you have a CSS file for styles
+import { ApiUrlContext } from '../../App.jsx'
 //TODO change the .env to make it easier for test or real deployment
 
 
-//Comment out which one the test enviroment is not.
-// const API_URL = "http://10.159.69.70:5001";  //Local Host URL
-// const API_URL = "http://localhost:5001";     // Local HOST
-const API_URL = "http://oasis-flow.com";      //Website URL
-
-
 function Interface(){
+    const API_URL = useContext(ApiUrlContext);
+
     const [solState, setSolState] = useState({
         solenoid1: false,
         solenoid2: false,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './Register.css'
 import '../../App.css'
 import { Link , useNavigate} from 'react-router-dom'
@@ -12,13 +12,12 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 // Import Assets
 import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
-
-const API_URL = "http://localhost:5001";  //Local Host URL
-// const API_URL = "http://oasis-flow.com";      //Website URL
-
+import { ApiUrlContext } from '../../App.jsx'
 
 
 export default function Register() {
+  const API_URL = useContext(ApiUrlContext);
+
   const navigateTo = useNavigate();
   const [userData, setUserData] = React.useState(
       {username: "", password: "", email: ""}
