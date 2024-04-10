@@ -11,8 +11,7 @@ import Interface from './Components/HardwareTesting/Interface';
 import Settings from './Components/Settings/Settings'
 import WaterCap from './Components/TankCapacity/WaterCap'
 import Weather from  './Components/Weather Display/Weather'
-
-
+import CalendarPage from './Components/Scheduler/Calendar';
 
 function NavLinkMenuItem({ to, icon, label, collapsed }) {
   const navigate = useNavigate();
@@ -74,10 +73,13 @@ function App(){
       <main style={{ flex: 1, padding: '10px' }}>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/zones" element={<ZoneOverview />} />
           <Route path="/interface" element={<Interface />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/weather" element={<Weather />} />
+          <Route path="/cap" element={<WaterCap />} />
           {/* Additional routes can be added here */}
         </Routes>
       </main>

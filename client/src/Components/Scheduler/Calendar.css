@@ -1,0 +1,168 @@
+/* Calendar.css */
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+.calendar-container .react-calendar {
+  width: 100%;
+  max-width: 1200px; /* Limiting calendar width for better readability */
+  margin-bottom: 20px;
+}
+
+.calendar-container .react-calendar__tile {
+  width: 100% !important;
+  height: 8vh !important;
+}
+
+.zone-data {
+  width: 100%;
+  max-width: 1200px; /* Limiting container width for better readability */
+  margin-top: 20px;
+}
+
+.active-zones-container {
+  width: calc(100% - 40px); /* Subtracting margin space from both sides */
+  max-width: 1200px; /* Limiting container width for better readability */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto 20px; /* Adjust margin as needed */
+}
+
+.add-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.zones-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted column width for better spacing */
+  gap: 20px;
+}
+
+.zone-item {
+  flex: 1; /* Allow each zone item to take up equal space */
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.zone-item h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+.zone-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.zone-detail {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.detail-label {
+  font-weight: bold;
+  margin-right: 10px; /* Add margin to separate label from value */
+}
+
+.detail-value {
+  color: #555;
+  flex-grow: 1; /* Allow value text to take up remaining space */
+}
+
+.remove-button {
+  background-color: #FF0000;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 10px; /* Add margin to separate button from value */
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.popup-inner {
+  max-width: 400px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.popup h2 {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+
+.add-schedule-container {
+  margin-left: auto; /* Push the "Add Schedule" button to the right */
+}
