@@ -10,27 +10,14 @@ import { duration } from '@mui/material';
 const API_URL = "http://oasis-flow.com";      //Website URL
 
 
-function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
-    const [isTimerPlaying, setIsTimerPlaying] = useState(remainingTime > 0);
+function ZonePopup({ zone, onClose }) {
+    const [isTimerPlaying, setIsTimerPlaying] = useState(false);
     const [inputValues, setInputValues] = useState({ hours: '', minutes: '', seconds: '' });
     const [timerDuration, setTimerDuration] = useState({ hours: 0, minutes: 0, seconds: 0 });
     const [timerKey, setTimerKey] = useState(0);
 
     // const totalDurationInSeconds = () => timerDuration.hours * 3600 + timerDuration.minutes * 60 + timerDuration.seconds;
-
-    useEffect(() => {
-        if (remainingTime > 0) {
-            setIsTimerPlaying(true);
-        } else {
-            setIsTimerPlaying(false);
-        }
-    }, [remainingTime]);
-
-    const handleTimerComplete = () => {
-        updateZoneTimer(zone.id, 0); // Reset the timer for this zone
-        setIsTimerPlaying(false);
-      };
-
+    
     const totalDurationInSeconds = () => {
         const hoursInSeconds = parseInt(inputValues.hours || 0) * 3600;
         const minutesInSeconds = parseInt(inputValues.minutes || 0) * 60;
@@ -63,8 +50,30 @@ function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
         }));
     };
 
+
+    const [moistureLevel, setMoistureLevel] = useState("Dry");
+
+    useEffect(() => {
+        const eventSource = new EventSource(`${API_URL}/api/moisture-level-stream`);
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if(data[`zone${zone.id}`]) {
+                setMoistureLevel(data[`zone${zone.id}`]);
+            }
+        };
+
+        eventSource.onerror = (error) => {
+            console.error("SSE error:", error);
+            eventSource.close();
+        };
+
+        // Cleanup function to close the connection when the component unmounts
+        return () => eventSource.close();
+    }, [zone.id]);
+
     const runZone = async () => {
-        const durationInSeconds = totalDurationInSeconds();
+        // const durationInSeconds = totalDurationInSeconds();
         setIsTimerPlaying(true);
         // setTimerKey(prevKey => prevKey +1);
         try {
@@ -74,14 +83,12 @@ function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
                 duration: durationInSeconds
             });
             console.log('Solenoid is running!', response.data);
-            updateZoneTimer(zone.id, durationInSeconds());
         } catch (error) {
             console.error('Run: Error starting solenoid:', error);
             // alert('Failed to start solenoid.');
             setIsTimerPlaying(false);
         }
         // handleReset();
-        
     };
 
     const stopZone = async () => {
@@ -97,7 +104,6 @@ function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
         } finally {
             handleReset();
         }
-        updateZoneTimer(zone.id, )
     };
 
     const durationInSeconds = totalDurationInSeconds();
@@ -109,9 +115,9 @@ function ZonePopup({ zone, onClose, remainingTime=0, updateZoneTimer}) {
                     <div className="zone-details">
                         <img src={zone.picture} alt={zone.name} />
                         <h1>{zone.name}</h1>
-                        <p>Moisture: {zone.moistureLevel}%</p>
-                        <p>Last Run: {zone.lastRun}</p>
-                        <p>Next Run: {zone.nextRun}</p>
+                        <p>Moisture: {moistureLevel}</p>
+                        {/* <p>Last Run: {zone.lastRun}</p>
+                        <p>Next Run: {zone.nextRun}</p> */}
                     </div>
                     <div className="quick-run">
                         <h4>Quick Run</h4>

@@ -6,8 +6,16 @@ import time
 from logging.handlers import RotatingFileHandler
 import socket
 import threading
+import schedule
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
+from pymongo import MongoClient
+import time
+from datetime import datetime, timedelta
 from weatherAPI import weather_blueprint
 from server import server_blueprint
+from server import get_schedules
+
 # from threading import Lock
 
 app = Flask(__name__)
@@ -18,6 +26,7 @@ WATER_LEVEL = 'water_level.txt'
 PUMP_STATUS = 'pump_state.txt'
 ESP32_STATUS = 'esp32_status.txt'
 BATTERY_LEVEL = 'battery_level.txt'
+MOISTURE_LEVEL = 'moisture_level.txt'
 
 subscribers = []
 
@@ -26,6 +35,123 @@ subscribers = []
 # Register the weather blueprint
 app.register_blueprint(weather_blueprint, url_prefix ="/api" )
 app.register_blueprint(server_blueprint)
+
+
+
+# ESP32_CONTROL_URL = "http://esp32.local/control"  # URL to control ESP32, adjust as needed
+
+
+from databaseAPI import retrieve_all_schedules
+
+@app.route("/api/get-schedules", methods=['GET'])
+def get_all_schedules():
+    schedules = retrieve_all_schedules()
+    return jsonify(schedules)
+
+def set_solenoid_state(solenoid_id, state):
+    # Replace with actual logic to control the solenoid
+    print(f"Setting solenoid {solenoid_id} to {'ON' if state else 'OFF'}")
+    # Example: GPIO.output(solenoid_pins[solenoid_id], GPIO.HIGH if state else GPIO.LOW)
+
+def schedule_solenoid_operations():
+    days_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
+    schedules = retrieve_all_schedules()  # Fetch all active schedules
+    
+    for schedule_info in schedules:
+        day_of_week = schedule_info['day'].capitalize()  # Ensure day of week has correct case
+        if day_of_week not in days_map:
+            continue  # Skip if day_of_week is invalid
+        
+        start_time = schedule_info["time"]
+        # Error handling for duration
+        try:
+            duration = int(schedule_info["duration"])  # Attempt to convert duration to integer
+        except ValueError:
+            print(f"Invalid duration '{schedule_info['duration']}' for schedule: {schedule_info}. Skipping...")
+            continue  # Skip this schedule due to invalid duration
+        
+        solenoid_id = schedule_info["zone"]  # Assuming 'zone' maps to 'solenoid_id'
+        
+        today = datetime.now()
+        today_day_num = today.weekday()
+        target_day_num = days_map[day_of_week]
+        
+        days_ahead = target_day_num - today_day_num
+        if days_ahead <= 0:  # If today is the same day or past the target day, schedule for next week
+            days_ahead += 7
+        
+        next_target_date = today + timedelta(days=days_ahead)
+        
+        # Combine next_target_date and start_time to a datetime
+        start_datetime = datetime.combine(next_target_date.date(), datetime.strptime(start_time, "%H:%M").time())
+        
+        # Schedule solenoid ON operation
+        print(f"Scheduling {solenoid_id} to start at {start_datetime} for {duration} minutes.")
+        
+        # Implement the actual scheduling logic here
+
+
+
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+# Initial scheduling
+schedule_solenoid_operations()
+
+# Run scheduler in a separate thread
+threading.Thread(target=run_scheduler, daemon=True).start()
+
+
+# def trigger_solenoid_control(solenoid_id, status):
+#     """
+#     Sends a signal to the ESP32 to control a specific solenoid.
+#     """
+#     data = {
+#         'solenoid_id': solenoid_id,
+#         'status': status,
+#     }
+#     try:
+#         response = requests.post(ESP32_CONTROL_URL, json=data)
+#         print(f"Response from ESP32: {response.text}")
+#     except requests.RequestException as e:
+#         print(f"Error sending control signal to ESP32: {e}")
+
+# def schedule_solenoid_operations():
+#     """
+#     Fetches schedules from the database and sets up the scheduler.
+#     """
+#     schedules = db.get_all_schedules()  # Assumes this function exists and returns all active schedules
+#     for schedule_info in schedules:
+#         for day in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]:
+#             if schedule_info[day]:  # Check if schedule is active for the day
+#                 start_time = schedule_info["time"]
+#                 duration = schedule_info["duration"]
+#                 solenoid_id = schedule_info["zone"]  # Assuming zone directly maps to solenoid ID
+                
+#                 # Schedule solenoid ON operation
+#                 schedule.every().day.at(start_time).do(trigger_solenoid_control, solenoid_id=solenoid_id, status="ON")
+                
+#                 # Calculate and schedule solenoid OFF operation after duration
+#                 end_time = (datetime.strptime(start_time, "%H:%M") + timedelta(minutes=duration)).strftime("%H:%M")
+#                 schedule.every().day.at(end_time).do(trigger_solenoid_control, solenoid_id=solenoid_id, status="OFF")
+
+# def run_scheduler():
+#     """
+#     Runs the scheduler in a loop.
+#     """
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
+
+# # Fetch and schedule solenoid operations initially
+# schedule_solenoid_operations()
+
+# # Start the scheduler in a background thread
+# threading.Thread(target=run_scheduler).start()
+
+
 
 @app.route('/test')
 def test():
@@ -328,7 +454,31 @@ def battery_level_stream():
 
     return Response(stream(), content_type='text/event-stream')
 
+@app.route('/api/update-moisture-level', methods=['POST'])
+def update_moisture_level():
+    data = request.get_json()
+    print("Received Moisture Level Data:", data)
+    with open(MOISTURE_LEVEL, 'w') as file:
+        json.dump(data, file)
+    return jsonify({"success": True}), 200
 
+@app.route('/api/moisture-level-stream')
+def moisture_level_stream():
+    def stream():
+        old_data = {}
+        while True:
+            try:
+                with open(MOISTURE_LEVEL, 'r') as file:
+                    current_data = json.load(file)
+                    # Only send data if it has changed
+                    if current_data != old_data:
+                        yield f"data: {json.dumps(current_data)}\n\n"
+                        old_data = current_data
+            except FileNotFoundError:
+                yield "data: {}\n\n"
+            time.sleep(1)  # Adjust timing as needed
+
+    return Response(stream(), content_type='text/event-stream')
 
 def update_battery_level():
     notify_subscribers()  # Notify all subscribers about the update

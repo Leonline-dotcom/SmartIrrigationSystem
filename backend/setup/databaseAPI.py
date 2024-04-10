@@ -343,4 +343,43 @@ def remove_zone_status(username, zone):
         my_user.update_one({}, {"$set": {update: False}})
         
         return
+    
+def retrieve_all_schedules():
+    with MongoClient(dbURL, tlsCAFile=ca) as org:
+        usersDB = org["Users"]
+        all_schedules = []
+        usersCols = usersDB.list_collection_names()
+        
+        for username in usersCols:
+            userCollection = usersDB[username]
+            user_data = userCollection.find_one()
+            
+            # Proceed only if 'Grid' is present and is a dict
+            if user_data and 'Grid' in user_data and isinstance(user_data['Grid'], dict):
+                for zone, zone_details in user_data['Grid'].items():
+                    # Skip if not a dict or 'Status' is False
+                    if not isinstance(zone_details, dict) or not zone_details.get('Status', False):
+                        continue
+                    
+                    schedule_details = zone_details.get('Schedule', {}).get('Day', {})
+                    
+                    # Ensure schedule_details is a dict
+                    if not isinstance(schedule_details, dict):
+                        continue
+                    
+                    for day, timing in schedule_details.items():
+                        # Ensure timing is a dict with 'Time' and 'Duration'
+                        if isinstance(timing, dict) and 'Time' in timing and 'Duration' in timing:
+                            all_schedules.append({
+                                "username": username,
+                                "zone": zone,
+                                "day": day,
+                                "time": timing["Time"],
+                                "duration": timing["Duration"]
+                            })
+    
+    return all_schedules
+
+
+
 
