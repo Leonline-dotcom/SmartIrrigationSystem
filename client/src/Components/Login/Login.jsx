@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import './Login.scss'
 import '../../App.scss'
-import {Link, Navigate} from 'react-router-dom'
+import {Link,  useNavigate } from 'react-router-dom'
 
 //import icon
 import { FaUserShield } from "react-icons/fa";
@@ -12,13 +12,16 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
-// const API_URL = "http://localhost:5001";  //Local Host URL
-const API_URL = "http://oasis-flow.com";      //Website URL
+const API_URL = "http://localhost:5001";  //Local Host URL
+// const API_URL = "http://oasis-flow.com";      //Website URL
 
 export default function Login() {
   const [userData, setUserData] = useState(
     {username: "", password: "", found: false}
   )
+
+  const navigateTo = useNavigate();
+
   /*async function login(event){
     event.preventDefault();
     let username_val = document.getElementById("username").value;
@@ -65,31 +68,31 @@ export default function Login() {
   }, [])*/
 
   function handleSubmit(event) {
-     event.preventDefault()
-     console.log(userData)
-     // API data submission goes here
-     fetch(`${API_URL}/api/login`, {
+    event.preventDefault();
+    console.log(userData);
+    // API data submission goes here
+    fetch(`${API_URL}/api/login`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(userData)
-     }).then(
-         res => res.json()
-     ).then(
-         data => {
-           setUserData(prevUserData => {
-               return {
-                    ...prevUserData,
-                    [userData.found]: data.found
-               }
-            })
-           console.log(data)
-         }
-     )
-     if (userData.found) {
-         Navigate({to: '/Calendar'})
-     }
-
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          found: data.message,
+        }));
+        console.log(data);
+        console.log("Trying to redirect");
+        if (data.message.includes("success")) {
+          navigateTo("/weather"); // Redirect to '/weather' if user is found
+        } else {
+          // Handle login failure
+          alert("Invalid login");
+        }
+      });
   }
+
 
     return (
         <div className='loginPage flex'>

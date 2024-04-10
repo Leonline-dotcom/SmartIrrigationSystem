@@ -123,80 +123,82 @@ video {
             position: relative;
             display: flex;
             flex-basis: 50%;
-            width: auto;
+            width: fit-content;
             height: 100%;
             padding: 0 1.5rem;
-            background: rgb(247, 244, 244);
+            background: red;
             text-align: center;
             justify-content: center;
             flex-direction: column;
             margin: auto;
             border-radius: 10px;
             overflow: hidden;
-
+          
             video,
             .footerDiv {
-                position: absolute;
+              position: absolute;
             }
-
+          
             video {
-                height: 100%;
-                width: 100%;
-                object-fit: cover;
-                top: 0;
-                bottom: 0;
-                right: 0;
-                left: 0;
+              height: 100%;
+              width: 100%;
+              object-fit: cover;
+              top: 0;
+              bottom: 0;
+              right: 0;
+              left: 0;
             }
-
+          
             .textDiv {
-                position: relative;
-                width: auto;
-
-                .title {
-                    color: var(--whiteColor);
-                    font-size: 35px;
-                    font-weight: 800;
-                }
-
-                p {
-                    color: var(--whiteColor);
-                    padding: 1rem;
-                    font-weight: 400;
-                }
+              position: relative;
+          
+              .title {
+                color: var(--whiteColor);
+                font-size: 35px;
+                font-weight: 800;
+                white-space: nowrap; /* Prevents text from wrapping */
+                overflow: hidden; /* Hides overflowed text */
+                text-overflow: ellipsis; /* Shows ellipsis (...) when text overflows */
+                max-width: 100%; /* Ensures the text doesn't exceed container width */
+              }
+          
+              p {
+                color: var(--whiteColor);
+                padding: 1rem;
+                font-weight: 400;
+              }
             }
-
+          
             .footerDiv {
-                bottom: 10px;
-                padding: 0 1rem;
-                height: 60px;
-                background: rgba(22, 94, 28, 0.248);
-                left: 0;
-                right: 0;
-                justify-content: space-between;
-                backdrop-filter: blur(1px);
+              bottom: 10px;
+              padding: 0 1rem;
+              height: 60px;
+              background: rgba(255, 255, 255, 0.248);
+              left: 0;
+              right: 0;
+              justify-content: space-between;
+              backdrop-filter: blur(1px);
+              border-radius: 10px;
+          
+              .text {
+                color: var(--whiteColor);
+              }
+          
+              .btn {
+                background: var(--whiteColor);
+                color: var(--primaryColor);
+                padding: 0.8rem 1.5rem;
                 border-radius: 10px;
-
-                .text {
-                    color: var(--whiteColor);
+                font-weight: 400px;
+                transition: 0.3s ease;
+          
+                &:hover {
+                  background: var(--hoverColor);
+                  color: var(--blackColor);
                 }
-
-                .btn {
-                    background: var(--whiteColor);
-                    color: var(--primaryColor);
-                    padding: .8rem 1.5rem;
-                    border-radius: 10px;
-                    font-weight: 400px;
-                    transition: .3s ease;
-
-                    &:hover {
-                        background: var(--hoverColor);
-                        color: var(--blackColor);
-                    }
-                }
+              }
             }
-        }
-
+          }          
         // Form container
         .formDiv {
             flex-basis: 50%;

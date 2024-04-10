@@ -42,16 +42,20 @@ const Weather = () => {
             <h1>{Math.round(weatherData.main.temp)}°F</h1>
           </div>
           <div className='description'>
-            <p>
-              {((weatherData.weather[0].description.includes("snow") &&
-                  <p>It's going to snow, please turn off system</p>) ||
-                (weatherData.weather[0].description.includes("rain") &&
-                  <p>It's going to rain, please turn off system</p>) ||
-                (weatherData.weather[0].description.includes("drizzle") &&
-                  <p>It's going to drizzle, please turn off system</p>) ||
-                <p>Enjoy your Day</p>
-              )}
-            </p>
+          {weatherData.weather[0].description.includes("snow") && (
+              <p>It's going to snow, please turn off system</p>
+            )}
+            {weatherData.weather[0].description.includes("rain") && (
+              <p>It's going to rain, please turn off system</p>
+            )}
+            {weatherData.weather[0].description.includes("drizzle") && (
+              <p>It's going to drizzle, please turn off system</p>
+            )}
+            {!weatherData.weather[0].description.includes("snow") &&
+             !weatherData.weather[0].description.includes("rain") &&
+             !weatherData.weather[0].description.includes("drizzle") && (
+              <p>Enjoy your Day</p>
+            )}
           </div>
         </>
       )}

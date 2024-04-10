@@ -1,7 +1,7 @@
 import React from 'react'
 import './Register.css'
 import '../../App.css'
-import { Link } from 'react-router-dom'
+import { Link , useNavigate} from 'react-router-dom'
 
 //import icons
 import { MdEmail } from "react-icons/md";
@@ -13,12 +13,13 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
-// const API_URL = "http://localhost:5001";  //Local Host URL
-const API_URL = "http://oasis-flow.com";      //Website URL
+const API_URL = "http://localhost:5001";  //Local Host URL
+// const API_URL = "http://oasis-flow.com";      //Website URL
 
 
 
 export default function Register() {
+  const navigateTo = useNavigate();
   const [userData, setUserData] = React.useState(
       {username: "", password: "", email: ""}
   )
@@ -41,12 +42,19 @@ export default function Register() {
       body: JSON.stringify(userData)
      }).then(
          res => res.json()
-     ).then(
-         data => {
+     ).then((data) =>{
            //setUserData(data)
-           console.log(data)
-         }
-     )
+           console.log(data);
+        console.log("Trying to redirect");
+        if (data.message.includes("New")) {
+          navigateTo("/weather"); // Redirect to '/weather' if user is found
+        } else {
+          // Handle login failure
+          alert("Invalid login");
+        }
+      });
+
+     
   }
 
   return (
