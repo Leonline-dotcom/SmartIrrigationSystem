@@ -13,7 +13,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
-// const API_URL = "http://localhost:5001";  //Local Host URL
+// const API_URL = "http://10.159.64.187:5001";  //Local Host URL
 const API_URL = "http://oasis-flow.com";      //Website URL
 
 
