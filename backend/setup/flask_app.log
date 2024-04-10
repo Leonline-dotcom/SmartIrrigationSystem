@@ -7953,3 +7953,7 @@
 2024-04-09 23:46:07,207 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:165]
 2024-04-09 23:46:09,352 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:165]
 2024-04-09 23:46:11,500 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:165]
+2024-04-10 00:56:04,732 ERROR: An error occurred: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:342]
+2024-04-10 00:56:37,264 ERROR: An error occurred: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:342]
+2024-04-10 00:56:43,657 ERROR: An error occurred: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:342]
+2024-04-10 00:56:48,273 ERROR: An error occurred: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:342]

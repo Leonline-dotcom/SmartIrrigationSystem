@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import './Weather.css';
-const url ="http://10.145.229.146:5001";
+const url ="http://10.159.66.192:5001";
 
 
 
