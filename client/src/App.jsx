@@ -57,8 +57,8 @@ function SidebarComponent(){
             {!collapsed && <span className="label">Collapse</span>}
         </MenuItem>
         <NavLinkMenuItem to="/zones" icon={<FaThLarge />} label="Zones" collapsed={collapsed}/>
+        <NavLinkMenuItem to="/Calendar" icon={<FaCalendarAlt />} label="Calendar" collapsed={collapsed}/>
         <NavLinkMenuItem to="/settings" icon={<FaCog />} label="Settings" collapsed={collapsed}/>
-        <NavLinkMenuItem to="/calendar" icon={<FaCalendarAlt />} label="Calendar" collapsed={collapsed}/>
         <NavLinkMenuItem to="/weather" icon={<FaCloudSun />} label="Weather" collapsed={collapsed}/>
       </Menu>
     </Sidebar>
@@ -81,7 +81,7 @@ function App(){
           <Route path="/settings" element={<Settings />} />
           <Route path="/weather" element={<Weather />} />
           <Route path="/cap" element={<WaterCap />} />
-          <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/Calendar" element={<CalendarPage />} />
           {/* Additional routes can be added here */}
         </Routes>
       </main>

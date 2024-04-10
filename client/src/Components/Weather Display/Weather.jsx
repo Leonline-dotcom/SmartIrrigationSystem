@@ -1,7 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import './Weather.css';
-const url ="http://10.159.66.192:5001";
+const url ="http://localhost:5001";
+// const url = "http://oasis-flow.com";      //Website URL
 
 
 
@@ -13,7 +14,7 @@ const Weather = () => {
   useEffect(() => {
     async function fetchWeatherData() {
       try {
-        const response = await axios.get(`${url}/weatherinfo`);
+        const response = await axios.get(`${url}/api/weatherinfo`);
         console.log("fetched data:", response.data)
         const data = await response.data;
         setWeatherData(data);

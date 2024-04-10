@@ -13,6 +13,8 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
+const API_URL = "http://localhost:5001";  //Local Host URL
+//const API_URL = "http://oasis-flow.com";      //Website URL
 
 export default function Register() {
   const [userData, setUserData] = React.useState(
@@ -31,7 +33,7 @@ export default function Register() {
     event.preventDefault()
     console.log(userData)
     // API data submission goes here
-    fetch("http://localhost:5001/register", {
+    fetch(`${API_URL}/api/register`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(userData)

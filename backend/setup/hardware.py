@@ -7,6 +7,7 @@ from logging.handlers import RotatingFileHandler
 import socket
 import threading
 from weatherAPI import weather_blueprint
+from server import server_blueprint
 # from threading import Lock
 
 app = Flask(__name__)
@@ -24,7 +25,8 @@ subscribers = []
 #TODO Write a indication the esp32 is connected to the internet
 
 # Register the weather blueprint
-app.register_blueprint(weather_blueprint )
+app.register_blueprint(weather_blueprint, url_prefix ="/api" )
+app.register_blueprint(server_blueprint)
 
 @app.route('/test')
 def test():

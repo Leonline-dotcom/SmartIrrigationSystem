@@ -4,6 +4,9 @@ import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 import axios from 'axios';
 
+ const API_URL = "http://localhost:5001";  //Local Host URL
+//const API_URL = "http://oasis-flow.com";      //Website URL
+
 export default function CalendarPage() {
     const [zoneData, setZoneData] = useState({
         zone: "Zone 1",
@@ -37,7 +40,7 @@ export default function CalendarPage() {
     const handleRemoveDay = (zone, day) => {
         // Implement removal logic here
         console.log("Remove day", zone, day);
-        fetch("http://localhost:5001/remove_day", {
+        fetch(`${API_URL}/api/remove_day`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({zone, day})
@@ -53,7 +56,7 @@ export default function CalendarPage() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        fetch("http://localhost:5001/Calendar", {
+        fetch(`${API_URL}/api/Calendar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(zoneData)
@@ -77,7 +80,7 @@ export default function CalendarPage() {
 
     const fetchZoneStatus = async () => {
         try {
-            const response = await axios.get(`http://localhost:5001/Calendar`);
+            const response = await axios.get(`${API_URL}/api/Calendar`);
             console.log("Fetched zone status:", response.data);
             setZoneStatus(response.data);
         } catch (error) {
@@ -140,9 +143,11 @@ export default function CalendarPage() {
                         <button className="close-btn" onClick={handleClosePopup}>
                             Close
                         </button>
-                        <h2>Schedule Zone</h2>
+                        <div className="popup-title">
+                            <h2>Schedule Zone</h2>
+                        </div>
                         <form onSubmit={handleSubmit}>
-                            <label htmlFor="zone">Select Zone:</label>
+                            <label className="select-zone-title" htmlFor="zone">Select Zone:</label>
                             <select id="zone" name="zone" onChange={handleChange} value={zoneData.zone}>
                                 <option value="Zone 1">Zone 1</option>
                                 <option value="Zone 2">Zone 2</option>

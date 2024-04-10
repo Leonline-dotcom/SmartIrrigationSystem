@@ -6,6 +6,7 @@ import './Interface.css';  // Assume you have a CSS file for styles
 
 //Comment out which one the test enviroment is not.
 // const API_URL = "http://10.159.69.70:5001";  //Local Host URL
+// const API_URL = "http://localhost:5001";     // Local HOST
 const API_URL = "http://oasis-flow.com";      //Website URL
 
 
