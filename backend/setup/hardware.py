@@ -18,6 +18,7 @@ WATER_LEVEL = 'water_level.txt'
 PUMP_STATUS = 'pump_state.txt'
 ESP32_STATUS = 'esp32_status.txt'
 BATTERY_LEVEL = 'battery_level.txt'
+MOISTURE_LEVEL = 'moisture_level.txt'
 
 subscribers = []
 
@@ -328,7 +329,31 @@ def battery_level_stream():
 
     return Response(stream(), content_type='text/event-stream')
 
+@app.route('/api/update-moisture-level', methods=['POST'])
+def update_moisture_level():
+    data = request.get_json()
+    print("Received Moisture Level Data:", data)
+    with open(MOISTURE_LEVEL, 'w') as file:
+        json.dump(data, file)
+    return jsonify({"success": True}), 200
 
+@app.route('/api/moisture-level-stream')
+def moisture_level_stream():
+    def stream():
+        old_data = {}
+        while True:
+            try:
+                with open(MOISTURE_LEVEL, 'r') as file:
+                    current_data = json.load(file)
+                    # Only send data if it has changed
+                    if current_data != old_data:
+                        yield f"data: {json.dumps(current_data)}\n\n"
+                        old_data = current_data
+            except FileNotFoundError:
+                yield "data: {}\n\n"
+            time.sleep(1)  # Adjust timing as needed
+
+    return Response(stream(), content_type='text/event-stream')
 
 def update_battery_level():
     notify_subscribers()  # Notify all subscribers about the update

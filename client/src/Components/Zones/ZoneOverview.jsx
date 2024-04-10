@@ -8,7 +8,6 @@ import zone4Image from './Assets/Zone4.jpg';
 
 function ZoneOverview() {
     const [selectedZone, setSelectedZone] = useState(null);
-    const [zoneTimers, setZoneTimers] = useState({});
 
     const zones = [
         { id: 1, name: 'Zone 1', picture: zone1Image, lastRun: 'Date1', nextRun: 'Date2'},
@@ -16,13 +15,6 @@ function ZoneOverview() {
         { id: 3, name: 'Zone 3', picture: zone3Image, lastRun: 'Date1', nextRun: 'Date2'},
         { id: 4, name: 'Zone 4', picture: zone4Image, lastRun: 'Date1', nextRun: 'Date2'}
     ];
-
-    const updateZoneTimer = (zoneId, remainingTime) => {
-        setZoneTimers((prev) => ({
-          ...prev,
-          [zoneId]: remainingTime,
-        }));
-      };
 
     const handleZoneClick = (zone) => {
         setSelectedZone(zone);
@@ -34,18 +26,9 @@ function ZoneOverview() {
                 <div key={zone.id} className='zone-item' onClick={() => handleZoneClick(zone)}>
                     <img src={zone.picture} alt={zone.name}/>
                     <h3>{zone.name}</h3>
-                    <p>Last Run: {zone.lastRun}</p>
-                    <p>Next Run: {zone.nextRun}</p>
                 </div>
             ))}
-            {selectedZone && (
-                <ZonePopup 
-                    zone={selectedZone} 
-                    onClose={() => setSelectedZone(null)} 
-                    remainingTime={zoneTimers[selectedZone.id]}
-                    updateZoneTimer={updateZoneTimer}
-                />
-            )}
+            {selectedZone && <ZonePopup zone={selectedZone} onClose={() => setSelectedZone(null)} />}
         </div>
     );
 }
