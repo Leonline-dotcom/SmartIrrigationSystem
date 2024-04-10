@@ -14,7 +14,7 @@ const Weather = () => {
   useEffect(() => {
     async function fetchWeatherData() {
       try {
-        const response = await axios.get(`${url}/weatherinfo`);
+        const response = await axios.get(`${url}/api/weatherinfo`);
         console.log("fetched data:", response.data)
         const data = await response.data;
         setWeatherData(data);
