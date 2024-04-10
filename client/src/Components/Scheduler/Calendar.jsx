@@ -140,9 +140,11 @@ export default function CalendarPage() {
                         <button className="close-btn" onClick={handleClosePopup}>
                             Close
                         </button>
-                        <h2>Schedule Zone</h2>
+                        <div className="popup-title">
+                            <h2>Schedule Zone</h2>
+                        </div>
                         <form onSubmit={handleSubmit}>
-                            <label htmlFor="zone">Select Zone:</label>
+                            <label className="select-zone-title" htmlFor="zone">Select Zone:</label>
                             <select id="zone" name="zone" onChange={handleChange} value={zoneData.zone}>
                                 <option value="Zone 1">Zone 1</option>
                                 <option value="Zone 2">Zone 2</option>

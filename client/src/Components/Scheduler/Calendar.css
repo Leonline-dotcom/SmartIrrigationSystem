@@ -4,18 +4,47 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
+  height: 500px;
 }
 
 .calendar-container .react-calendar {
   width: 100%;
-  max-width: 1200px; /* Limiting calendar width for better readability */
+  max-width: 800px; /* Limiting calendar width for better readability */
+  max-height: 600px;
   margin-bottom: 20px;
+  background-color: #FFFFFF;
+}
+
+.calendar-container .react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+  color: #000000
+}
+
+.calendar-container .react-calendar__navigation__label,
+.calendar-container .react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
+.calendar-container .react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
+.calendar-container .react-calendar__navigation__arrow.react-calendar__navigation__next-button,
+.calendar-container .react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+  color:#000000
 }
 
 .calendar-container .react-calendar__tile {
   width: 100% !important;
   height: 8vh !important;
+}
+
+.calendar-container .react-calendar__month-view__days {
+  padding: 0.5em;
+  color: #000000;
+}
+
+.calendar-container .react-calendar__tile {
+  color: #000000;
+}
+
+.calendar-container .react-calendar__month-view__days__day--weekend,
+.calendar-container .react-calendar__month-view__days__day--neighboringMonth {
+  color: #000000; /* Change day number color to black */
 }
 
 .zone-data {
@@ -81,9 +110,14 @@
   align-items: center;
 }
 
+.select-zone-title {
+  color:#000000
+}
+
 .detail-label {
   font-weight: bold;
   margin-right: 10px; /* Add margin to separate label from value */
+  color:#000000
 }
 
 .detail-value {
@@ -118,6 +152,10 @@
   max-width: 400px;
 }
 
+.popup-title {
+  color:#000000
+}
+
 .close-btn {
   position: absolute;
   top: 10px;
@@ -126,6 +164,11 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
+  background-color:#FF0000
+}
+
+.close-btn:hover {
+  background-color:#660606
 }
 
 .popup h2 {
@@ -165,4 +208,10 @@ select {
 
 .add-schedule-container {
   margin-left: auto; /* Push the "Add Schedule" button to the right */
+}
+
+.days-container,
+.time-container,
+.duration-container {
+  color:#000000
 }
