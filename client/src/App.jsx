@@ -9,7 +9,7 @@ import Register from './Components/Register/Register'
 import ZoneOverview from './Components/Zones/ZoneOverview'
 import Interface from './Components/HardwareTesting/Interface';
 import Settings from './Components/Settings/Settings'
-import WaterCap from './Components/TankCapacity/WaterCap'
+// import WaterCap from './Components/TankCapacity/WaterCap'
 import Weather from  './Components/Weather Display/Weather'
 import CalendarPage from './Components/Scheduler/Calendar';
 
@@ -80,7 +80,6 @@ function App(){
           <Route path="/interface" element={<Interface />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/weather" element={<Weather />} />
-          <Route path="/cap" element={<WaterCap />} />
           <Route path="/Calendar" element={<CalendarPage />} />
           {/* Additional routes can be added here */}
         </Routes>

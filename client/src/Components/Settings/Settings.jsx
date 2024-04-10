@@ -5,12 +5,15 @@ import axios from 'axios';
 function Settings() {
     const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
     const [systemStatus, setSystemStatus] = useState({
-        battery: "Placeholder",
+        battery: "100",
         waterLevel: "Placeholder"
     });
 
-    const API_URL = "http://localhost:5001";  //Local Host URL
-    // const API_URL = "http://oasis-flow.com";      //Website URL
+    //Comment out which one the test enviroment is not.
+    // const API_URL = "http://10.159.64.187:5001";  //Local Host URL
+    const API_URL = "http://oasis-flow.com";      //Website URL
+
+
 
     useEffect(() => {
         const initiateSSE = (url, onMessage) => {
@@ -69,13 +72,13 @@ function Settings() {
                 <span className="data-value">{esp32Status.network}</span>
             </div>
             <div className="data-container">
-                <h2 className="data-heading">Battery Capacity:</h2>
+                <h2 className="data-heading">Battery Capacity %:</h2>
                 <span className="data-value">{systemStatus.battery}</span>
             </div>
-            <div className="data-container">
+            {/* <div className="data-container">
                 <h2 className="data-heading">Water Tank Capacity:</h2>
                 <span className="data-value">{systemStatus.waterLevel}</span>
-            </div>
+            </div> */}
         </div>
     );
 }

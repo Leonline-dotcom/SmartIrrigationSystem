@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import './Weather.css';
-const url ="http://localhost:5001";
-// const url = "http://oasis-flow.com";      //Website URL
+// const url ="http://10.159.64.187:5001";
+const url = "http://oasis-flow.com";      //Website URL
 
 
 
