@@ -2,21 +2,17 @@ import React, { useState, useEffect } from 'react';
 import './Settings.css';
 import axios from 'axios';
 
-function Settings(){
+function Settings() {
     const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
     const [systemStatus, setSystemStatus] = useState({
         battery: "Placeholder",
         waterLevel: "Placeholder"
-      });
+    });
 
-    //Comment out which one the test enviroment is not.
     const API_URL = "http://localhost:5001";  //Local Host URL
     // const API_URL = "http://oasis-flow.com";      //Website URL
 
-
-
     useEffect(() => {
-        // Function to initiate the SSE connection and handle incoming messages.
         const initiateSSE = (url, onMessage) => {
             const source = new EventSource(url);
 
@@ -27,16 +23,13 @@ function Settings(){
 
             source.onerror = (error) => {
                 console.error("SSE error:", error);
-                source.close(); // Close the existing connection
-
-                // Attempt to reconnect after a timeout
+                source.close(); 
                 setTimeout(() => initiateSSE(url, onMessage), 5000);
             };
 
             return source;
         };
 
-        // Establishing SSE connections for ESP32 status and battery level
         const esp32StatusSource = initiateSSE(`${API_URL}/api/esp32-status-stream`, (data) => {
             setEsp32Status(data);
         });
@@ -44,38 +37,46 @@ function Settings(){
         const batteryLevelSource = initiateSSE(`${API_URL}/api/battery-level-stream`, (data) => {
             setSystemStatus(prevState => ({
                 ...prevState,
-                battery: `${data.batterySOC}%` // Format as needed
+                battery: `${data.batterySOC}%`
             }));
         });
 
         const waterLevelSource = initiateSSE(`${API_URL}/api/water-level-stream`, (data) => {
             setSystemStatus(prevState => ({
-              ...prevState,
-              waterLevel: `${data.waterLevel} cm` // Assuming distance in cm, format as needed
+                ...prevState,
+                waterLevel: `${data.waterLevel} cm`
             }));
-          });
+        });
 
-        // Cleanup function to close the SSE connections when the component unmounts or re-renders
         return () => {
             esp32StatusSource.close();
             batteryLevelSource.close();
             waterLevelSource.close();
         };
 
-    }, [API_URL]); // Dependency array to re-run the effect if API_URL changes
+    }, [API_URL]);
 
-    return(
+    return (
         <div className="settings">
-        <h1>Smart Irrigation Settings</h1>
-        <div className="connection-status">
-            <h2>Connection Status: </h2>
-            <div className="status-indicator" style={{ backgroundColor: esp32Status.connected ? 'green' : 'red' }}></div>
-            <span>{esp32Status.connected ? 'Connected' : 'Disconnected'}</span>
+            <h1 className="settings-title">Smart Irrigation Settings</h1>
+            <div className="connection-status">
+                <h2 className="status-heading">Connection Status: </h2>
+                <div className={`status-indicator ${esp32Status.connected ? 'connected' : 'disconnected'}`}></div>
+                <span className="status-text">{esp32Status.connected ? 'Connected' : 'Disconnected'}</span>
+            </div>
+            <div className="data-container">
+                <h2 className="data-heading">Wifi Network:</h2>
+                <span className="data-value">{esp32Status.network}</span>
+            </div>
+            <div className="data-container">
+                <h2 className="data-heading">Battery Capacity:</h2>
+                <span className="data-value">{systemStatus.battery}</span>
+            </div>
+            <div className="data-container">
+                <h2 className="data-heading">Water Tank Capacity:</h2>
+                <span className="data-value">{systemStatus.waterLevel}</span>
+            </div>
         </div>
-        <h2>Wifi Network: {esp32Status.network}</h2>
-        <h2>Battery Capacity: {systemStatus.battery}</h2> {/* You'll replace placeholders with actual data like you did for esp32Status */}
-        <h2>Water Tank Capacity: {systemStatus.waterLevel}</h2>
-    </div>
     );
 }
 

@@ -1,13 +1,60 @@
-.settings .status-indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block; /* Align with text */
-    margin-right: 10px; /* Space between indicator and text */
+.settings {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f7f6;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.settings .connection-status {
+.settings-title {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    color:black;
+}
+
+.connection-status {
     display: flex;
-    align-items: center; /* Align items vertically */
-    gap: 10px; /* Space between elements */
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status-heading {
+    font-size: 18px;
+    margin-right: 10px;
+    color:black;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-indicator.connected {
+    background-color: #2ecc71; /* Green */
+}
+
+.status-indicator.disconnected {
+    background-color: #e74c3c; /* Red */
+}
+
+.status-text {
+    font-size: 16px;
+    color:black;
+}
+
+.data-container {
+    margin-bottom: 15px;
+}
+
+.data-heading {
+    font-size: 18px;
+    color:black;
+}
+
+.data-value {
+    font-size: 16px;
+    color: #555;
 }
