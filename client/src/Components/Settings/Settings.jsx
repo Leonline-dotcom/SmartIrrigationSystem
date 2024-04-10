@@ -44,14 +44,22 @@ function Settings(){
         const batteryLevelSource = initiateSSE(`${API_URL}/api/battery-level-stream`, (data) => {
             setSystemStatus(prevState => ({
                 ...prevState,
-                battery: `${data.voltage} V` // Format as needed
+                battery: `${data.batterySOC}%` // Format as needed
             }));
         });
+
+        const waterLevelSource = initiateSSE(`${API_URL}/api/water-level-stream`, (data) => {
+            setSystemStatus(prevState => ({
+              ...prevState,
+              waterLevel: `${data.waterLevel} cm` // Assuming distance in cm, format as needed
+            }));
+          });
 
         // Cleanup function to close the SSE connections when the component unmounts or re-renders
         return () => {
             esp32StatusSource.close();
             batteryLevelSource.close();
+            waterLevelSource.close();
         };
 
     }, [API_URL]); // Dependency array to re-run the effect if API_URL changes
@@ -66,7 +74,7 @@ function Settings(){
         </div>
         <h2>Wifi Network: {esp32Status.network}</h2>
         <h2>Battery Capacity: {systemStatus.battery}</h2> {/* You'll replace placeholders with actual data like you did for esp32Status */}
-        <h2>Water Tank Capacity: </h2>
+        <h2>Water Tank Capacity: {systemStatus.waterLevel}</h2>
     </div>
     );
 }

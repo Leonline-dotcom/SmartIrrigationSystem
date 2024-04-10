@@ -297,9 +297,11 @@ def solenoid_control():
 @app.route('/api/update-battery-level', methods=['POST'])
 def update_battery_level():
     data = request.get_json()
-    battery_voltage = data.get('voltage')
+    # battery_voltage = data.get('voltage')
+    battery_soc = data.get('batterySOC')
     with open(BATTERY_LEVEL, 'w') as file:
-        json.dump({'voltage': battery_voltage}, file)
+        json.dump({'batterySOC': battery_soc}, file)
+    print(f"Battery Level: {battery_soc}")
     return jsonify({"success": True}), 200
 
 
