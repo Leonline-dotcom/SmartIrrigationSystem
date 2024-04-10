@@ -31,6 +31,18 @@ export default function Register() {
     event.preventDefault()
     console.log(userData)
     // API data submission goes here
+    fetch("http://localhost:5001/register", {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(userData)
+     }).then(
+         res => res.json()
+     ).then(
+         data => {
+           //setUserData(data)
+           console.log(data)
+         }
+     )
   }
 
   return (

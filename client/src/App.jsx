@@ -11,8 +11,7 @@ import Interface from './Components/HardwareTesting/Interface';
 import Settings from './Components/Settings/Settings'
 import WaterCap from './Components/TankCapacity/WaterCap'
 import Weather from  './Components/Weather Display/Weather'
-
-
+import CalendarPage from './Components/Scheduler/Calendar';
 
 function NavLinkMenuItem({ to, icon, label, collapsed }) {
   const navigate = useNavigate();
