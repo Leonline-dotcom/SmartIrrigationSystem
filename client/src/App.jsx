@@ -80,6 +80,7 @@ function App(){
           <Route path="/settings" element={<Settings />} />
           <Route path="/weather" element={<Weather />} />
           <Route path="/cap" element={<WaterCap />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           {/* Additional routes can be added here */}
         </Routes>
       </main>
