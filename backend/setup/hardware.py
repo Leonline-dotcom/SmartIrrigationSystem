@@ -23,7 +23,7 @@ subscribers = []
 #TODO Write a indication the esp32 is connected to the internet
 
 # Register the weather blueprint
-app.register_blueprint(weather_blueprint )
+app.register_blueprint(weather_blueprint, url_prefix ="/api" )
 
 @app.route('/test')
 def test():
