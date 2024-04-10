@@ -88,65 +88,17 @@ export default function CalendarPage() {
     return (
         <div className="calendar-page">
             <div className="calendar-container">
-                <Calendar />
+                <Calendar style={{ flexGrow: 1 }} />
             </div>
-            <div className="action-container">
-                <button className="add-button" onClick={handleAddButtonClick}>
-                    Add Schedule
-                </button>
-                {showPopup && (
-                    <div className="popup">
-                        <div className="popup-inner">
-                            <button className="close-btn" onClick={handleClosePopup}>
-                                Close
-                            </button>
-                            <h2>Schedule Zone</h2>
-                            <form onSubmit={handleSubmit}>
-              <label htmlFor="zone">Select Zone:</label>
-                <select id="zone" name="zone" onChange={handleChange} value={zoneData.zone}>
-                    <option value="Zone 1">Zone 1</option>
-                    <option value="Zone 2">Zone 2</option>
-                    <option value="Zone 3">Zone 3</option>
-                    <option value="Zone 4">Zone 4</option>
-                </select>
-                <div className="days-container">
-                    <label>Days:</label>
-                    <input type="checkbox" id="sunday" name="sunday" onChange={handleChange} checked={zoneData.sunday}/>
-                    <label htmlFor="sunday">Sunday</label>
-                    <input type="checkbox" id="monday" name="monday" onChange={handleChange} checked={zoneData.monday}/>
-                    <label htmlFor="monday">Monday</label>
-                    <input type="checkbox" id="tuesday" name="tuesday" onChange={handleChange} checked={zoneData.tuesday}/>
-                    <label htmlFor="tuesday">Tuesday</label>
-                    <input type="checkbox" id="wednesday" name="wednesday" onChange={handleChange} checked={zoneData.wednesday}/>
-                    <label htmlFor="wednesday">Wednesday</label>
-                    <input type="checkbox" id="thursday" name="thursday" onChange={handleChange} checked={zoneData.thursday}/>
-                    <label htmlFor="thursday">Thursday</label>
-                    <input type="checkbox" id="friday" name="friday" onChange={handleChange} checked={zoneData.friday}/>
-                    <label htmlFor="friday">Friday</label>
-                    <input type="checkbox" id="saturday" name="saturday" onChange={handleChange} checked={zoneData.saturday}/>
-                    <label htmlFor="saturday">Saturday</label>
-                    {/* Repeat for other days */}
-                </div>
-                <div className="time-container">
-                    <label htmlFor="time">Time:</label>
-                    <input type="time" id="time" name="time" onChange={handleChange} value={zoneData.time}/>
-                </div>
-                <div className="duration-container">
-                    <label htmlFor="duration">Duration:</label>
-                    <input type="text" id="duration" name="duration" onChange={handleChange} value={zoneData.duration}/>
-                </div>
-                    <button>
-                        <span>Submit</span>
-                    </button>
-              </form>
-                        </div>
-                    </div>
-                )}
-
-            </div>
-            {/* Render zone data */}
             <div className="zone-data">
-                <h2>Active Zones</h2>
+                <div className="active-zones-container">
+                    <h2>Active Zones</h2>
+                    <div className="add-schedule-container">
+                        <button className="add-button" onClick={handleAddButtonClick}>
+                            Add Schedule
+                        </button>
+                    </div>
+                </div>
                 <div className="zones-container">
                     {Object.entries(zoneStatus).map(([zone, data]) => (
                         <div key={zone} className="zone-item">
@@ -182,6 +134,54 @@ export default function CalendarPage() {
                     ))}
                 </div>
             </div>
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-inner">
+                        <button className="close-btn" onClick={handleClosePopup}>
+                            Close
+                        </button>
+                        <h2>Schedule Zone</h2>
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor="zone">Select Zone:</label>
+                            <select id="zone" name="zone" onChange={handleChange} value={zoneData.zone}>
+                                <option value="Zone 1">Zone 1</option>
+                                <option value="Zone 2">Zone 2</option>
+                                <option value="Zone 3">Zone 3</option>
+                                <option value="Zone 4">Zone 4</option>
+                            </select>
+                            <div className="days-container">
+                                <label>Days:</label>
+                                <input type="checkbox" id="sunday" name="sunday" onChange={handleChange} checked={zoneData.sunday}/>
+                                <label htmlFor="sunday">Sunday</label>
+                                <input type="checkbox" id="monday" name="monday" onChange={handleChange} checked={zoneData.monday}/>
+                                <label htmlFor="monday">Monday</label>
+                                <input type="checkbox" id="tuesday" name="tuesday" onChange={handleChange} checked={zoneData.tuesday}/>
+                                <label htmlFor="tuesday">Tuesday</label>
+                                <input type="checkbox" id="wednesday" name="wednesday" onChange={handleChange} checked={zoneData.wednesday}/>
+                                <label htmlFor="wednesday">Wednesday</label>
+                                <input type="checkbox" id="thursday" name="thursday" onChange={handleChange} checked={zoneData.thursday}/>
+                                <label htmlFor="thursday">Thursday</label>
+                                <input type="checkbox" id="friday" name="friday" onChange={handleChange} checked={zoneData.friday}/>
+                                <label htmlFor="friday">Friday</label>
+                                <input type="checkbox" id="saturday" name="saturday" onChange={handleChange} checked={zoneData.saturday}/>
+                                <label htmlFor="saturday">Saturday</label>
+                                {/* Repeat for other days */}
+                            </div>
+                            <div className="time-container">
+                                <label htmlFor="time">Time:</label>
+                                <input type="time" id="time" name="time" onChange={handleChange} value={zoneData.time}/>
+                            </div>
+                            <div className="duration-container">
+                                <label htmlFor="duration">Duration:</label>
+                                <input type="text" id="duration" name="duration" onChange={handleChange} value={zoneData.duration}/>
+                            </div>
+                            <button className="submit-button" type="submit">
+                                <span>Submit</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
