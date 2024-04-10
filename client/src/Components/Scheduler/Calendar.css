@@ -136,6 +136,10 @@
   margin-left: 10px; /* Add margin to separate button from value */
 }
 
+.remove-button:hover {
+  background-color:#660606
+}
+
 .popup {
   position: fixed;
   top: 50%;
