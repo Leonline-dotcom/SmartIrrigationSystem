@@ -9,11 +9,11 @@ import { BsShieldLockFill } from "react-icons/bs";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 // Import Assets
-import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
+import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
-const API_URL = "http://localhost:5001";  //Local Host URL
-//const API_URL = "http://oasis-flow.com";      //Website URL
+// const API_URL = "http://localhost:5001";  //Local Host URL
+const API_URL = "http://oasis-flow.com";      //Website URL
 
 export default function Login() {
   const [userData, setUserData] = useState(
@@ -102,7 +102,7 @@ export default function Login() {
               <div className="textDiv">
                 {/* TODO: Make a Company Slogan*/}
                 <h2 className='title'>Grow More With Less</h2>
-                <p>Gardening in the modern Era</p>
+                <p>Gardening in the Modern Era</p>
               </div>
 
         <div className="footerDiv flex">
@@ -121,7 +121,6 @@ export default function Login() {
         </div>
 
               <form action="" className='form grid' onSubmit={handleSubmit}>
-                <span className='showMessage'>Login Status goes here</span>
 
                 <div className="inputDiv">
                   <label htmlFor="username">Username</label>
@@ -151,14 +150,10 @@ export default function Login() {
                   </div>
                 </div>
 
-                <button className='btn flex'>
+                <button className='btn flex' component={Link} to="/weather">
                   <span>Login</span>
                   <FaLongArrowAltRight className='icon'/>
                 </button>
-
-                <span className="forgotPassword">
-            Forgot your password? <a href="">Click Here</a>
-          </span>
 
               </form>
             </div>

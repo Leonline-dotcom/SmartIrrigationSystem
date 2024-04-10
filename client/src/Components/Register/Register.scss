@@ -1,0 +1,321 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+// Set up default Styling :)
+
+:root {
+    // Colors variables
+    --primaryColor: hsl(94,55%,56%);
+    --hoverColor: hsl(93,75%,76%);
+    --paleGreen: hsl(96,75%,89%);
+    --whiteColor: hsl(0,0%,100%);
+    --blackColor: hsl(0,0%,0%);
+    --greyText: hsl(0,0%,40%);
+    --bgColor: hsl(113,11%,85%);
+    --inputColor: hsl(330,12%,97%);
+    --sidebarTextColor: hsl(0, 0%, 100%); // White color for text
+    --sidebarIconColor: hsl(0, 0%, 100%); // White color for icons
+    --sidebarBgColor: hsl(0, 0%, 46%); // Grey background
+    --sidebarActiveBgColor: #1976d2; // Blue background for active/hover state
+
+    /* Font and Typography ;) */
+    --biggestFontSize: 2.5rem;
+    --h1FontSize: 1.5rem;
+    --h2FontSize: 1.25rem;
+    --h3FontSize: 1rem;
+    --normalFontSize: .939rem;
+    --smallFontSize: .813rem;
+    --smallestFontSize: .75rem;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.grid {
+    display: grid;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+html {
+    font-size: 90%;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.icon {
+    font-size: var(--h2FontSize);
+    cursor: pointer;
+}
+
+img, video {
+    height: auto;
+    width: 100%;
+}
+
+.message {
+    display: none;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    color: var(--greyText);
+}
+
+.btn .icon {
+    margin-left: .5rem;
+}
+
+.btn:hover {
+    color: var(--primaryColor);
+    background-color: var(--paleGreen);
+}
+
+// Styling for Pages
+
+.registerPage {
+    height: 100vh;
+    width: 100%;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 7px 50px rgb(214, 223, 213);
+
+    // Little box for all components in RegisterPage
+    .container {
+        height: 75vh;
+        width: 60%;
+        margin: auto;
+        justify-content: space-between;
+        border-radius: 10px;
+        background: hsl(0,0%,91%);
+
+        // Formatting for video code
+        .videoDiv {
+            position: relative;
+            display: flex;
+            flex-basis: 50%;
+            width: fit-content;
+            height: 100%;
+            padding: 0 1.5rem;
+            background: rgb(245, 241, 241);
+            text-align: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: auto;
+            border-radius: 10px;
+            overflow: hidden;
+
+            video, .footerDiv {
+                position: absolute;
+            }
+
+            video {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+
+            .textDiv {
+                position: relative;
+                padding: 1rem; // Add padding to the .textDiv
+            
+                .title {
+                    color: var(--whiteColor);
+                    font-size: 2rem; // Increase font size for title
+                    font-weight: 800;
+                    margin-bottom: 1rem; // Add margin bottom to create space between title and paragraph
+                }
+            
+                p {
+                    color: var(--whiteColor);
+                    font-size: 1.2rem; // Increase font size for paragraph
+                    font-weight: 400;
+                }
+            }
+
+            .footerDiv {
+                bottom: 10px;
+                padding: 0 1rem;
+                height: 60px;
+                background: rgba(255, 255, 255, 0.248);
+                left: 0;
+                right: 0;
+                justify-content: space-between;
+                backdrop-filter: blur(1px);
+                border-radius: 10px;
+
+                .text {
+                    color: var(--whiteColor);
+                }
+
+                .btn {
+                    background: var(--whiteColor);
+                    color: var(--primaryColor);
+                    padding: .8rem 1.5rem;
+                    border-radius: 10px;
+                    font-weight: 400px;
+                    transition: .3s ease;
+
+                    &:hover {
+                        background: var(--hoverColor);
+                        color: var(--blackColor);
+                    }
+                }
+            }
+        }
+
+        .formDiv {
+            flex-basis: 50%;
+            margin: auto;
+            flex-direction: column;
+            gap: .25rem;
+            transform: translateY(-1rem);
+
+            .headerDiv {
+                text-align: center;
+                padding: 1.5rem 0;
+
+                img {
+                    width: 60px;
+                    padding-bottom: .5rem;
+                }
+
+                h3 {
+                    font-size: 25px;
+                    color: var(--blackColor);
+                    font-weight: 600;
+                }
+            }
+
+            .form {
+                gap: .25rem;
+
+                .inputDiv {
+                    .icon {
+                        color: var(--greyText);
+                    }
+
+                    input {
+                        background: var(--normalFontSize);
+                        outline: none;
+                        border: none;
+                        width: 200px;
+                    }
+
+                    label {
+                        color: var(--blackColor);
+                        font-weight: 400;
+                        font-size: 14px;
+                        padding: .5rem 0;
+                        display: block;
+                    }
+
+                    .input {
+                        gap: .5rem;
+                        padding: 1rem;
+                        background: var(--inputColor);
+                        border-radius: 10px;
+                    }
+                }
+
+                .btn {
+                    padding: .8rem;
+                    background: var(--primaryColor);
+                    border-radius: 10px;
+                    color: var(--whiteColor);
+                    align-items: center;
+                    margin: auto;
+                    justify-content: center;
+                    font-size: 16px;
+                    width: 100%;
+                    gap: .5rem;
+                    transition: .3s ease;
+
+                    .icon {
+                        font: size 25px;
+                        transition: .3s ease;
+                    }
+
+                    &:hover {
+                        background: var(--hoverColor);
+                        color: var(--blackColor);
+
+                        .icon {
+                            color: var(--blackColor);
+                            transform: translate(5px);
+                        }
+                    }
+                }
+
+                .forgotPassword {
+                    font-size: 13px;
+                    color: var(--blackColor);
+                    opacity: .7;
+                    text-align: center;
+
+                    a {
+                        text-decoration: underline;
+                        cursor: pointer;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Media Queries for Responsive Design
+
+@media only screen and (max-width: 1024px) {
+    .container {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .container {
+        flex-direction: column;
+        .videoDiv,
+        .formDiv {
+            flex-basis: auto;
+            width: 100%;
+        }
+
+        .videoDiv {
+            order: 2;
+        }
+
+        .formDiv {
+            order: 1;
+        }
+    }
+}

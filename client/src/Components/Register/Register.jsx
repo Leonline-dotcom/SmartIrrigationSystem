@@ -10,11 +10,13 @@ import { BsShieldLockFill } from "react-icons/bs";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 // Import Assets
-import video from '../../Assets/LoginAssets/Watering_Plant.mp4'
+import video from '../../Assets/LoginAssets/plant.mp4'
 import logo from '../../Assets/LoginAssets/leaf_Logo.png'
 
-const API_URL = "http://localhost:5001";  //Local Host URL
-//const API_URL = "http://oasis-flow.com";      //Website URL
+// const API_URL = "http://localhost:5001";  //Local Host URL
+const API_URL = "http://oasis-flow.com";      //Website URL
+
+
 
 export default function Register() {
   const [userData, setUserData] = React.useState(
@@ -120,15 +122,10 @@ export default function Register() {
               />
             </div>
           </div>
-          
           <button className='btn flex'>
             <span>Register</span>
             <FaLongArrowAltRight className='icon' />
           </button>
-
-          <span className="forgotPassword">
-            Forgot your password? <a href="">Click Here</a>
-          </span>
 
         </form>
       </div>    

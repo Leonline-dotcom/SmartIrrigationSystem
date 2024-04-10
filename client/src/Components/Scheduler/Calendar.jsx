@@ -4,8 +4,8 @@ import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 import axios from 'axios';
 
- const API_URL = "http://localhost:5001";  //Local Host URL
-//const API_URL = "http://oasis-flow.com";      //Website URL
+//  const API_URL = "http://localhost:5001";  //Local Host URL
+const API_URL = "http://oasis-flow.com";      //Website URL
 
 export default function CalendarPage() {
     const [zoneData, setZoneData] = useState({
