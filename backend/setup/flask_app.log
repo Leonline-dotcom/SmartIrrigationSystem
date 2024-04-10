@@ -8375,3 +8375,6 @@
 2024-04-10 12:30:32,354 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
 2024-04-10 12:30:34,615 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
 2024-04-10 12:30:36,773 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
+2024-04-10 12:30:38,911 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
+2024-04-10 12:30:41,069 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
+2024-04-10 12:30:43,212 INFO: Received request for solenoid states [in /Users/austinking/SmartIrrigationSystem/backend/setup/hardware.py:170]
