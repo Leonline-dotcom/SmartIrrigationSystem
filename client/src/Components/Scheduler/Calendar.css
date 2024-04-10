@@ -219,3 +219,20 @@ select {
 .duration-container {
   color:#000000
 }
+
+.zone-item.zone-zone-1 h3 {
+  color: blue; /* Example color for Zone 1 */
+}
+
+.zone-item.zone-zone-2 h3 {
+  color: red; /* Example color for Zone 2 */
+}
+
+.zone-item.zone-zone-3 h3 {
+  color: green; /* Example color for Zone 3 */
+}
+
+.zone-item.zone-zone-4 h3 {
+  color: orange; /* Example color for Zone 4 */
+}
+

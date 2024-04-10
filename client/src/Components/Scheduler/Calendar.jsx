@@ -103,38 +103,39 @@ export default function CalendarPage() {
                     </div>
                 </div>
                 <div className="zones-container">
-                    {Object.entries(zoneStatus).map(([zone, data]) => (
-                        <div key={zone} className="zone-item">
-                            {data.Status ? (
-                                <>
-                                    <h3>{zone}</h3>
-                                    <div className="zone-details">
-                                        {Object.entries(data.Schedule.Day).map(([day, schedule]) => (
-                                            schedule.Time !== "" && schedule.Duration !== "" && (
-                                                <div key={day} className="zone-detail">
-                                                    <span className="detail-label">{day}: </span>
-                                                    <span className="detail-value">
-                                                        Time: {schedule.Time}, Duration: {schedule.Duration}
-                                                        <button
-                                                            className="remove-button"
-                                                            onClick={() => handleRemoveDay(zone, day)}
-                                                        >
-                                                            Remove
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            )
-                                        ))}
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <h3>{zone}</h3>
-                                    <p>Not currently scheduled</p>
-                                </>
-                            )}
-                        </div>
+                {Object.entries(zoneStatus).map(([zone, data]) => (
+    <div key={zone} className={`zone-item zone-${zone.toLowerCase().replace(/\s+/g, '-')}`}>
+        {data.Status ? (
+            <>
+                <h3>{zone}</h3>
+                <div className="zone-details">
+                    {Object.entries(data.Schedule.Day).map(([day, schedule]) => (
+                        schedule.Time !== "" && schedule.Duration !== "" && (
+                            <div key={day} className="zone-detail">
+                                <span className="detail-label">{day}: </span>
+                                <span className="detail-value">
+                                    Time: {schedule.Time}, Duration: {schedule.Duration}
+                                    <button
+                                        className="remove-button"
+                                        onClick={() => handleRemoveDay(zone, day)}
+                                    >
+                                        Remove
+                                    </button>
+                                </span>
+                            </div>
+                        )
                     ))}
+                </div>
+            </>
+        ) : (
+            <>
+                <h3>{zone}</h3>
+                <p>Not currently scheduled</p>
+            </>
+        )}
+    </div>
+))}
+
                 </div>
             </div>
             {showPopup && (
