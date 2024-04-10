@@ -18,11 +18,16 @@ const Weather = () => {
         const data = await response.data;
         setWeatherData(data);
       } catch (error) {
+        console.log(`${url}/weatherinfo`)
         console.error('Error fetching weather data mate:', error);
       }
     }
 
-    fetchWeatherData();
+    fetchWeatherData(); // inital render
+
+    const intervalId = setInterval(fetchWeatherData, 60 * 1000); // Fetch data every 1 minute
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   return (
