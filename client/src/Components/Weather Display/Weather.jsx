@@ -22,7 +22,11 @@ const Weather = () => {
       }
     }
 
-    fetchWeatherData();
+    fetchWeatherData(); // inital render
+
+    const intervalId = setInterval(fetchWeatherData, 60 * 1000); // Fetch data every 1 minute
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   return (
