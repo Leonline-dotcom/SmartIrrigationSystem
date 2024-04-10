@@ -74,6 +74,7 @@ function App(){
       <main style={{ flex: 1, padding: '10px' }}>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/zones" element={<ZoneOverview />} />
           <Route path="/interface" element={<Interface />} />
