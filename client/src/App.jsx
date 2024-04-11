@@ -64,8 +64,8 @@ function SidebarComponent(){
 
 
 function App(){
-  const apiUrl = "http://10.159.66.48:5001";  //Local Host URL
-  //const apiUrl = "http://oasis-flow.com";      //Website URL
+  // const apiUrl = "http://10.159.66.48:5001";  //Local Host URL
+  const apiUrl = "http://oasis-flow.com";      //Website URL
 
   return (
     <BrowserRouter>
