@@ -14,7 +14,12 @@ function ZonePopup({ zone, onClose }) {
     const [timerKey, setTimerKey] = useState(0);
 
     // const totalDurationInSeconds = () => timerDuration.hours * 3600 + timerDuration.minutes * 60 + timerDuration.seconds;
-    
+
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+    // Then, pass this state to the ZonePopup component
+    // {selectedZone && <ZonePopup isSidebarCollapsed={isSidebarCollapsed} zone={selectedZone} onClose={() => setSelectedZone(null)} />}
+
     const totalDurationInSeconds = () => {
         const hoursInSeconds = parseInt(inputValues.hours || 0) * 3600;
         const minutesInSeconds = parseInt(inputValues.minutes || 0) * 60;
