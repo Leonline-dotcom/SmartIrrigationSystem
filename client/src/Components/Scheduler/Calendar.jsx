@@ -68,11 +68,24 @@ export default function CalendarPage() {
                 }));
                 console.log(data);
                 fetchZoneStatus(); // Fetch updated zone data after adding a schedule
+                reloadSchedules();
             });
         if (zoneData.found) {
             Navigate({ to: '/Calendar' });
         }
     }
+
+    const reloadSchedules = () => {
+        fetch(`${API_URL}/api/reload-schedules`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => response.json())
+            .then(data => {
+                console.log('Schedules reloaded:', data);
+            }).catch(err => {
+                console.error('Error reloading schedules:', err);
+            });
+    };
 
     useEffect(() => {
         fetchZoneStatus();

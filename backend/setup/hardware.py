@@ -7,14 +7,15 @@ from logging.handlers import RotatingFileHandler
 import socket
 import threading
 # import schedule
-import requests
+# import requests
 # from apscheduler.schedulers.background import BackgroundScheduler
-from pymongo import MongoClient
+# from pymongo import MongoClient
 import time
 from datetime import datetime, timedelta
 from weatherAPI import weather_blueprint
 from server import server_blueprint
 from server import get_schedules
+import certifi
 
 # from threading import Lock
 
@@ -30,6 +31,9 @@ MOISTURE_LEVEL = 'moisture_level.txt'
 
 subscribers = []
 
+dbURL = "mongodb+srv://leon:36uWjhORYtUi9Oif@cluster0.uaokiyz.mongodb.net/?retryWrites=true&w=majority"
+ca = certifi.where()
+
 #TODO Write a indication the esp32 is connected to the internet
 
 # Register the weather blueprint
@@ -37,120 +41,193 @@ app.register_blueprint(weather_blueprint, url_prefix ="/api" )
 app.register_blueprint(server_blueprint)
 
 
+# from databaseAPI import retrieve_all_schedules
 
-# ESP32_CONTROL_URL = "http://esp32.local/control"  # URL to control ESP32, adjust as needed
 
-
-from databaseAPI import retrieve_all_schedules
-
-@app.route("/api/get-schedules", methods=['GET'])
-def get_all_schedules():
-    schedules = retrieve_all_schedules()
-    return jsonify(schedules)
-
-def set_solenoid_state(solenoid_id, state):
-    # Replace with actual logic to control the solenoid
-    print(f"Setting solenoid {solenoid_id} to {'ON' if state else 'OFF'}")
-    # Example: GPIO.output(solenoid_pins[solenoid_id], GPIO.HIGH if state else GPIO.LOW)
-
-def schedule_solenoid_operations():
-    days_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
-    schedules = retrieve_all_schedules()  # Fetch all active schedules
-    
-    for schedule_info in schedules:
-        day_of_week = schedule_info['day'].capitalize()  # Ensure day of week has correct case
-        if day_of_week not in days_map:
-            continue  # Skip if day_of_week is invalid
+# def retrieve_all_schedules():
+#     with MongoClient(dbURL, tlsCAFile=ca) as client:
+#         db = client["Users"]  # Assuming 'Users' is the correct database
+#         user_data = db["admin4"].find_one()  # Retrieve data for user 'admin4'
         
-        start_time = schedule_info["time"]
-        # Error handling for duration
-        try:
-            duration = int(schedule_info["duration"])  # Attempt to convert duration to integer
-        except ValueError:
-            print(f"Invalid duration '{schedule_info['duration']}' for schedule: {schedule_info}. Skipping...")
-            continue  # Skip this schedule due to invalid duration
+#         if not user_data or 'Grid' not in user_data:
+#             return []
         
-        solenoid_id = schedule_info["zone"]  # Assuming 'zone' maps to 'solenoid_id'
+#         all_schedules = []
+#         for zone, details in user_data['Grid'].items():
+#             if not isinstance(details, dict) or not details.get('Status', False):
+#                 continue  # Only process active zones
+            
+#             schedule_details = details.get('Schedule', {}).get('Day', {})
+#             for day, timing in schedule_details.items():
+#                 if timing.get('Time') and timing.get('Duration'):
+#                     all_schedules.append({
+#                         "zone": zone,
+#                         "day": day,
+#                         "time": timing["Time"],
+#                         "duration": timing["Duration"]
+#                     })
         
-        today = datetime.now()
-        today_day_num = today.weekday()
-        target_day_num = days_map[day_of_week]
+#         # Write schedules to file
+#         with open('all_schedules.txt', 'w') as file:
+#             for schedule in all_schedules:
+#                 file.write(json.dumps(schedule) + '\n')
         
-        days_ahead = target_day_num - today_day_num
-        if days_ahead <= 0:  # If today is the same day or past the target day, schedule for next week
-            days_ahead += 7
-        
-        next_target_date = today + timedelta(days=days_ahead)
-        
-        # Combine next_target_date and start_time to a datetime
-        start_datetime = datetime.combine(next_target_date.date(), datetime.strptime(start_time, "%H:%M").time())
-        
-        # Schedule solenoid ON operation
-        print(f"Scheduling {solenoid_id} to start at {start_datetime} for {duration} minutes.")
-        
-        # Implement the actual scheduling logic here
+#         return all_schedules
 
 
+# @app.route("/api/get-schedules", methods=['GET'])
+# def get_all_schedules():
+#     schedules = retrieve_all_schedules()
+#     return jsonify(schedules)
 
-def run_scheduler():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-# Initial scheduling
-schedule_solenoid_operations()
-
-# Run scheduler in a separate thread
-threading.Thread(target=run_scheduler, daemon=True).start()
-
-
-# def trigger_solenoid_control(solenoid_id, status):
-#     """
-#     Sends a signal to the ESP32 to control a specific solenoid.
-#     """
-#     data = {
-#         'solenoid_id': solenoid_id,
-#         'status': status,
-#     }
-#     try:
-#         response = requests.post(ESP32_CONTROL_URL, json=data)
-#         print(f"Response from ESP32: {response.text}")
-#     except requests.RequestException as e:
-#         print(f"Error sending control signal to ESP32: {e}")
+# def set_solenoid_state(solenoid_id, state):
+#     # Replace with actual logic to control the solenoid
+#     print(f"Setting solenoid {solenoid_id} to {'ON' if state else 'OFF'}")
+#     # Example: GPIO.output(solenoid_pins[solenoid_id], GPIO.HIGH if state else GPIO.LOW)
 
 # def schedule_solenoid_operations():
-#     """
-#     Fetches schedules from the database and sets up the scheduler.
-#     """
-#     schedules = db.get_all_schedules()  # Assumes this function exists and returns all active schedules
+#     days_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
+#     print("Fetching schedules")
+#     schedules = retrieve_all_schedules()  # Fetch all active schedules
+#     print(f"Schedules Retrieved: {schedules}")
+    
 #     for schedule_info in schedules:
-#         for day in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]:
-#             if schedule_info[day]:  # Check if schedule is active for the day
-#                 start_time = schedule_info["time"]
-#                 duration = schedule_info["duration"]
-#                 solenoid_id = schedule_info["zone"]  # Assuming zone directly maps to solenoid ID
-                
-#                 # Schedule solenoid ON operation
-#                 schedule.every().day.at(start_time).do(trigger_solenoid_control, solenoid_id=solenoid_id, status="ON")
-                
-#                 # Calculate and schedule solenoid OFF operation after duration
-#                 end_time = (datetime.strptime(start_time, "%H:%M") + timedelta(minutes=duration)).strftime("%H:%M")
-#                 schedule.every().day.at(end_time).do(trigger_solenoid_control, solenoid_id=solenoid_id, status="OFF")
+#         day_of_week = schedule_info['day'].capitalize()  # Ensure day of week has correct case
+#         if day_of_week not in days_map:
+#             print(f"Day {day_of_week} is not valid.")
+#             continue  # Skip if day_of_week is invalid
+        
+#         start_time = schedule_info["time"]
+#         # Error handling for duration
+#         try:
+#             duration = int(schedule_info["duration"])  # Attempt to convert duration to integer
+#         except ValueError:
+#             print(f"Invalid duration '{schedule_info['duration']}' for schedule: {schedule_info}. Skipping...")
+#             continue  # Skip this schedule due to invalid duration
+        
+#         # solenoid_id = schedule_info["zone"]  # Assuming 'zone' maps to 'solenoid_id'
+        
+#         # today = datetime.now()
+#         # today_day_num = today.weekday()
+#         # target_day_num = days_map[day_of_week]
+        
+#         # days_ahead = target_day_num - today_day_num
+#         # if days_ahead <= 0:  # If today is the same day or past the target day, schedule for next week
+#         #     days_ahead += 7
+        
+#         # next_target_date = today + timedelta(days=days_ahead)
+        
+#         # # Combine next_target_date and start_time to a datetime
+#         # start_datetime = datetime.combine(next_target_date.date(), datetime.strptime(start_time, "%H:%M").time())
+        
+#         # # Schedule solenoid ON operation
+#         # print(f"Scheduling {solenoid_id} to start at {start_datetime} for {duration} minutes.")
+#         solenoid_id = schedule_info["zone"]
+#         today = datetime.now()
+#         target_day_num = days_map[day_of_week]
+#         days_ahead = (target_day_num - today.weekday()) % 7
+#         next_target_date = today + timedelta(days=days_ahead)
+#         start_datetime = datetime.combine(next_target_date.date(), datetime.strptime(start_time, "%H:%M").time())
+
+#         if start_datetime > datetime.now():
+#             print(f"Scheduling {solenoid_id} at {start_datetime} for {duration} minutes.")
+#             # Logic to set the scheduler
+#         else:
+#             print(f"Scheduled time {start_datetime} is in the past.")
+
+#         with open('all_schedules.txt', 'a') as file:
+#             json.dump(schedule_info, file)
+#             file.write('\n')  # Ensure each schedule is on a new line
+        
+        
+
+
+# def update_active_schedules():
+#     current_time = datetime.now()
+#     active_schedules = []
+    
+#     with open('all_schedules.txt', 'r') as file:
+#         for line in file:
+#             schedule = json.loads(line.strip())
+#             day_of_week = datetime.strptime(schedule['day'], "%A")
+#             start_time = datetime.combine(day_of_week, datetime.strptime(schedule['time'], "%H:%M").time())
+#             duration = int(schedule['duration'])
+#             end_time = start_time + timedelta(minutes=duration)
+            
+#             if start_time <= current_time <= end_time:
+#                 active_schedules.append(schedule)
+    
+#     with open('active_schedules.txt', 'w') as file:
+#         for schedule in active_schedules:
+#             file.write(json.dumps(schedule) + '\n')
+    
+#     return active_schedules
+
+
+# @app.route('/api/current-schedule', methods=['GET'])
+# def get_current_schedule():
+#     with open('active_schedules.txt', 'r') as active_schedules_file:
+#         active_schedules = [json.loads(line.strip()) for line in active_schedules_file]
+    
+    
+#     response = {'zone1': False, 'zone2': False, 'zone3': False, 'zone4': False}
+#     for schedule in active_schedules:
+#         response[schedule['zone']] = True
+    
+#     return jsonify(response)
+
+# @app.route('/api/reload-schedules', methods=['POST'])
+# def api_reload_schedules():
+#     reload_schedules()
+#     return jsonify({'status': 'Schedules reloaded'}), 200
+
 
 # def run_scheduler():
-#     """
-#     Runs the scheduler in a loop.
-#     """
 #     while True:
 #         schedule.run_pending()
 #         time.sleep(1)
 
-# # Fetch and schedule solenoid operations initially
 # schedule_solenoid_operations()
 
-# # Start the scheduler in a background thread
-# threading.Thread(target=run_scheduler).start()
+# def reload_schedules():
+#     # Assuming active_schedules is a list that holds the current active schedules in memory
+#     global active_schedules
+#     active_schedules = []  # Clearing current schedules
 
+#     try:
+#         with open('all_schedules.txt', 'r') as file:
+#             all_schedules = [json.loads(line.strip()) for line in file if line.strip()]
+#             for schedule in all_schedules:
+#                 start_time_str = f"{datetime.now().date()} {schedule['time']}"
+#                 start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M')
+#                 duration_minutes = int(schedule['duration'])
+
+#                 # Calculate the end time from start time and duration
+#                 end_time = start_time + timedelta(minutes=duration_minutes)
+
+#                 # Append the schedule along with its calculated end time
+#                 active_schedules.append({
+#                     "start_time": start_time,
+#                     "end_time": end_time,
+#                     "zone": schedule["zone"],
+#                     "duration": duration_minutes
+#                 })
+
+#         print("Schedules successfully reloaded.")
+#     except FileNotFoundError:
+#         print("The schedule file was not found.")
+#     except json.JSONDecodeError:
+#         print("Error decoding the JSON from the schedule file.")
+#     except Exception as e:
+#         print(f"An unexpected error occurred: {str(e)}")
+
+# # Run scheduler in a separate thread
+# threading.Thread(target=run_scheduler, daemon=True).start()
+
+
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(update_active_schedules, 'interval', minutes=1)
+# scheduler.start()
 
 
 @app.route('/test')
@@ -174,7 +251,7 @@ def read_solenoid_states():
     try:
         with open(STATE_FILE, 'r') as f:
             states = json.load(f)
-            print(f"Reading solenoid states for ESP32: {states}")
+            # print(f"Reading solenoid states for ESP32: {states}") # Uncomment for it to print out states of all solenoids
             return states
     except (FileNotFoundError, json.JSONDecodeError):
         # Return default state if file does not exist or is empty/corrupted
@@ -202,7 +279,7 @@ def read_water_level():
         print(f"Error reading water level: {e}")
         return {"waterLevel": "Unknown"}
 
-TIMEOUT_THRESHOLD = 20  # Time out needs to bigger than the delay on the esp32
+TIMEOUT_THRESHOLD = 10  # Time out needs to bigger than the delay on the esp32
 def read_esp32_status():
     try:
         with open(ESP32_STATUS, 'r') as f:
@@ -292,23 +369,58 @@ def solenoid_events():
     return Response(stream(), content_type='text/event-stream')
 
 # API to get the current state of all solenoids
-@app.route('/api/solenoid-states', methods=['GET'])
-def get_solenoid_states():
-    app.logger.info("Received request for solenoid states")
-    solenoids = read_solenoid_states()
+# @app.route('/api/solenoid-states', methods=['GET'])
+# def get_solenoid_states():
+#     app.logger.info("Received request for solenoid states")
+#     solenoids = read_solenoid_states()
 
-    response_data = {
-        solenoid: state for solenoid, state in solenoids.items()
-        if solenoid.startswith('solenoid')  # Filter keys to include only solenoid states
-    }
+#     response_data = {
+#         solenoid: state for solenoid, state in solenoids.items()
+#         if solenoid.startswith('solenoid')  # Filter keys to include only solenoid states
+#     }
 
 
-    app.logger.debug(f"Current solenoid states: {solenoids}")
-    response = make_response(jsonify(response_data), 200)
-    print(f"Sending solenoid states to ESP32: {response_data}")
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
-    return response
+#     app.logger.debug(f"Current solenoid states: {solenoids}")
+#     response = make_response(jsonify(response_data), 200)
+#     print(f"Sending solenoid states to ESP32: {response_data}")
+#     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+#     app.logger.debug(f"Sending response: {response.get_data(as_text=True)}")
+#     return response
+
+
+# New solenoid-status
+@app.route('/api/solenoid-status', methods=['GET'])
+def get_solenoid_status():
+    # Retrieve the scheduled state of solenoids
+    scheduled_states = get_current_scheduled_states()
+    
+    # Retrieve the overridden or timer-based states
+    overridden_states = get_overridden_states()
+    
+    # Final response object
+    final_states = {}
+
+    # Assume solenoid keys are like 'solenoid1', 'solenoid2', etc.
+    for i in range(1, 5):
+        key = f'solenoid{i}'
+        # Default to schedule unless overridden by a timer
+        final_states[key] = overridden_states.get(key, scheduled_states.get(key, False))
+    
+    return jsonify(final_states)
+
+def get_current_scheduled_states():
+    with open('active_schedules.txt', 'r') as file:
+        active_schedules = [json.loads(line.strip()) for line in file]
+    current_states = {}
+    for schedule in active_schedules:
+        solenoid_id = schedule['zone']
+        current_states[solenoid_id] = True  # Assuming active schedule means solenoid is on
+    return current_states
+
+def get_overridden_states():
+    # This function should return the current states based on any manual override or timers
+    return read_solenoid_states()  # Assuming this reads the actual current state of solenoids
+
 
 @app.route('/api/pump-state', methods=['GET'])
 def get_pump_state():

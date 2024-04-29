@@ -2,59 +2,62 @@ import React, { useState, useEffect, useContext } from 'react';
 import './Settings.css';
 import axios from 'axios';
 import { ApiUrlContext } from '../../App.jsx'
+import useSSE from '../hooks/useSSE.jsx';
 
 function Settings() {
     const API_URL = useContext(ApiUrlContext);
 
-    const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
-    const [systemStatus, setSystemStatus] = useState({
-        battery: "100",
-        waterLevel: "Placeholder"
-    });
+    const esp32Status = useSSE(`${API_URL}/api/esp32-status-stream`, { connected: false, network: '' });
+    const systemStatus = useSSE(`${API_URL}/api/battery-level-stream`, { battery: "100", waterLevel: "Placeholder" });
+    // const [esp32Status, setEsp32Status] = useState({ connected: false, network: '' });
+    // const [systemStatus, setSystemStatus] = useState({
+    //     battery: "100",
+    //     waterLevel: "Placeholder"
+    // });
 
-    useEffect(() => {
-        const initiateSSE = (url, onMessage) => {
-            const source = new EventSource(url);
+    // useEffect(() => {
+    //     const initiateSSE = (url, onMessage) => {
+    //         const source = new EventSource(url);
 
-            source.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                onMessage(data);
-            };
+    //         source.onmessage = (event) => {
+    //             const data = JSON.parse(event.data);
+    //             onMessage(data);
+    //         };
 
-            source.onerror = (error) => {
-                console.error("SSE error:", error);
-                source.close(); 
-                setTimeout(() => initiateSSE(url, onMessage), 5000);
-            };
+    //         source.onerror = (error) => {
+    //             console.error("SSE error:", error);
+    //             source.close(); 
+    //             setTimeout(() => initiateSSE(url, onMessage), 5000);
+    //         };
 
-            return source;
-        };
+    //         return source;
+    //     };
 
-        const esp32StatusSource = initiateSSE(`${API_URL}/api/esp32-status-stream`, (data) => {
-            setEsp32Status(data);
-        });
+    //     const esp32StatusSource = initiateSSE(`${API_URL}/api/esp32-status-stream`, (data) => {
+    //         setEsp32Status(data);
+    //     });
 
-        const batteryLevelSource = initiateSSE(`${API_URL}/api/battery-level-stream`, (data) => {
-            setSystemStatus(prevState => ({
-                ...prevState,
-                battery: `${data.batterySOC}%`
-            }));
-        });
+    //     const batteryLevelSource = initiateSSE(`${API_URL}/api/battery-level-stream`, (data) => {
+    //         setSystemStatus(prevState => ({
+    //             ...prevState,
+    //             battery: `${data.batterySOC}%`
+    //         }));
+    //     });
 
-        const waterLevelSource = initiateSSE(`${API_URL}/api/water-level-stream`, (data) => {
-            setSystemStatus(prevState => ({
-                ...prevState,
-                waterLevel: `${data.waterLevel} cm`
-            }));
-        });
+    //     const waterLevelSource = initiateSSE(`${API_URL}/api/water-level-stream`, (data) => {
+    //         setSystemStatus(prevState => ({
+    //             ...prevState,
+    //             waterLevel: `${data.waterLevel} cm`
+    //         }));
+    //     });
 
-        return () => {
-            esp32StatusSource.close();
-            batteryLevelSource.close();
-            waterLevelSource.close();
-        };
+    //     return () => {
+    //         esp32StatusSource.close();
+    //         batteryLevelSource.close();
+    //         waterLevelSource.close();
+    //     };
 
-    }, [API_URL]);
+    // }, [API_URL]);
 
     return (
         <div className="settings">

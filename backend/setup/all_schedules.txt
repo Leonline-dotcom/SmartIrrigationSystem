@@ -1,0 +1,8 @@
+{"zone": "Zone 1", "day": "Monday", "time": "11:39", "duration": "28"}
+{"zone": "Zone 2", "day": "Monday", "time": "11:41", "duration": "22"}
+{"zone": "Zone 4", "day": "Monday", "time": "11:20", "duration": "60"}
+{"zone": "Zone 3", "day": "Monday", "time": "11:14", "duration": "60"}
+{"zone": "Zone 1", "day": "Monday", "time": "11:39", "duration": "28"}
+{"zone": "Zone 2", "day": "Monday", "time": "11:41", "duration": "22"}
+{"zone": "Zone 4", "day": "Monday", "time": "11:20", "duration": "60"}
+{"zone": "Zone 3", "day": "Monday", "time": "11:14", "duration": "60"}
